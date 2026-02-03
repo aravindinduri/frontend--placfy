@@ -322,7 +322,7 @@ function Home() {
         open={!!roleModal} 
         onClose={() => setRoleModal(null)} 
         onSelect={handleRoleSelect} 
-        title={roleModal === 'signup' ? 'Sign up as' : 'Sign in aaaa'} 
+        title={roleModal === 'signup' ? 'Sign up as' : 'Sign in as'} 
       />
       
       <BookDemo open={showDemo} onClose={() => setShowDemo(false)} />
