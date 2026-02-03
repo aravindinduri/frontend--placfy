@@ -1,0 +1,11 @@
+function Spinner() {
+  return (
+    <div className="flex items-center justify-center">
+      <span className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-brand/20 border-t-brand"></span>
+    </div>
+  )
+}
+
+export default Spinner
+
+
