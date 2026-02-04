@@ -515,7 +515,7 @@ function Navbar() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
-          <button className="btn-outline text-sm" onClick={() => navigate('/signup')}>Login</button>
+          <button className="btn-outline text-sm" onClick={() => navigate('/signup')}>create workspace</button>
           {/* <button className="btn-primary text-sm" onClick={() => navigate('/signup')}>
             <FiUserCheck className="text-lg" /> Start for Free
           </button> */}

@@ -6,6 +6,8 @@ import Spinner from './components/ui/Spinner.jsx'
 import ProtectedRoute from './components/auth/ProtectedRoute.jsx'
 import NotFound from './components/ui/NotFound.jsx'
 import AuthPage from './components/pages/auth/AuthPage.jsx'
+import Workspace from './components/pages/auth/Workspace.jsx'
+import WorkspaceDashboard from './components/pages/auth/WorkspaceDashboard.jsx'
 
 const Home = lazy(() => import('./components/pages/home/Home.jsx'))
 const Contact = lazy(() => import('./components/pages/home/Contact.jsx'))
@@ -18,7 +20,7 @@ const EmployeeLayout = lazy(() => import('./components/pages/employee/EmployeeLa
 
 function AppRoutes() {
   const location = useLocation()
-  const hideGlobalLayout = /^\/(employee)\b/.test(location.pathname)
+  const hideGlobalLayout = /^\/(employee|auth\/workspace|auth\/workspace-dashboard)\b/.test(location.pathname)
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -31,6 +33,8 @@ function AppRoutes() {
             <Route path="/about" element={<About /> } />
             <Route path="/login" element={<AuthPage />} />
             <Route path="/signup" element={<AuthPage />} />
+            <Route path="/auth/workspace" element={<Workspace />} />
+            <Route path="/auth/workspace-dashboard" element={<WorkspaceDashboard />} />
             <Route path="/login-as/:token" element={<LoginAsPage />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/pricing" element={<Pricing />} />

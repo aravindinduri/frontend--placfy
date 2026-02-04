@@ -25,7 +25,7 @@ export default function Signup({ onLoginClick }) {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/register/', {
+      const response = await fetch('/api/v1/auth/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

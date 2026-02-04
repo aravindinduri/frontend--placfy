@@ -5,6 +5,7 @@ import * as yup from 'yup'
 import { useNavigate } from 'react-router-dom'
 import { FiEye, FiEyeOff, FiUser, FiLock } from 'react-icons/fi'
 import toast from 'react-hot-toast'
+import { storeToken } from '../../utils/authToken'
 
 const loginSchema = yup.object().shape({
   username: yup.string().required('Username is required'),
@@ -22,7 +23,9 @@ export default function Login({ onSignupClick }) {
   const onSubmit = async (data) => {
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/login/', {
+      console.log('Attempting login with:', { username: data.username })
+      
+      const response = await fetch('/api/v1/auth/login/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,6 +36,8 @@ export default function Login({ onSignupClick }) {
         }),
       })
 
+      console.log('Login response status:', response.status)
+
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.detail || 'Login failed')
@@ -40,15 +45,20 @@ export default function Login({ onSignupClick }) {
 
       const tokens = await response.json()
       
-      // Store tokens in localStorage
-      localStorage.setItem('access_token', tokens.access)
-      localStorage.setItem('refresh_token', tokens.refresh)
+      console.log('Tokens received:', { access: tokens.access ? 'present' : 'missing' })
+      
+      // Store tokens using the correct utility function
+      if (tokens.access) {
+        storeToken(tokens.access)
+        console.log('Token stored successfully')
+      }
       
       toast.success('Login successful!')
       setTimeout(() => {
-        navigate('/')
+        navigate('/auth/workspace')
       }, 1000)
     } catch (error) {
+      console.error('Login error details:', error)
       toast.error(error.message || 'Login failed')
     } finally {
       setLoading(false)
