@@ -60,7 +60,11 @@ export default function AdminDashboard() {
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-[#5a4fff]" />
               <span className="text-sm font-medium text-slate-700">
+<<<<<<< HEAD
                 MEMBER
+=======
+                HR
+>>>>>>> bc20423 (invit)
               </span>
             </div>
           </div>
@@ -73,7 +77,11 @@ export default function AdminDashboard() {
           <div className="bg-[#5a4fff] rounded-2xl p-6 text-white flex justify-between items-center">
             <div>
               <h2 className="text-xl font-bold">
+<<<<<<< HEAD
                 Hello MEMBER 👋
+=======
+                Hello Member 👋
+>>>>>>> bc20423 (invit)
               </h2>
               <p className="text-white/80 mt-1 text-sm">
                 You have 9 new applications today
@@ -170,6 +178,17 @@ const Stat = ({ title, value }) => (
       {value}
     </p>
   </div>
+<<<<<<< HEAD
+);
+
+const TableRow = ({ name, status }) => (
+  <tr className="border-t border-slate-200">
+    <td className="py-3">{name}</td>
+    <td>{status}</td>
+    <td className="text-[#5a4fff] font-medium">In Progress</td>
+  </tr>
+=======
+>>>>>>> bc20423 (invit)
 );
 
 const TableRow = ({ name, status }) => (

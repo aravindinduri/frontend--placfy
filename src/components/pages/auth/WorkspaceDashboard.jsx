@@ -217,4 +217,8 @@ const SidebarItem = ({ icon, label, active }) => (
     {icon}
     {label}
   </div>
+<<<<<<< HEAD
 );
+=======
+);
+>>>>>>> bc20423 (invit)
