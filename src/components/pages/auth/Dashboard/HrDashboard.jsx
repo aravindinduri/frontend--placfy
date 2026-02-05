@@ -170,17 +170,6 @@ const Stat = ({ title, value }) => (
       {value}
     </p>
   </div>
-<<<<<<< HEAD
-);
-
-const TableRow = ({ name, status }) => (
-  <tr className="border-t border-slate-200">
-    <td className="py-3">{name}</td>
-    <td>{status}</td>
-    <td className="text-[#5a4fff] font-medium">In Progress</td>
-  </tr>
-=======
->>>>>>> bc20423 (invit)
 );
 
 const TableRow = ({ name, status }) => (
