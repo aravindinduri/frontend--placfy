@@ -13,14 +13,14 @@ export default function AuthPage() {
   }, [location.pathname]);
 
   return (
-
-      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+    <div className="min-h-screen bg-[#EEF2FF] flex items-center justify-center p-4">
+      <div className="bg-white p-8 rounded-[2.5rem] shadow-xl w-full max-w-md border border-slate-100 animate-in fade-in zoom-in duration-300">
         {showLogin ? (
           <Login onSignupClick={() => setShowLogin(false)} />
         ) : (
           <Signup onLoginClick={() => setShowLogin(true)} />
         )}
       </div>
-
+    </div>
   );
 }

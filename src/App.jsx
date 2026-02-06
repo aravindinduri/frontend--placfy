@@ -7,6 +7,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute.jsx'
 import NotFound from './components/ui/NotFound.jsx'
 import AuthPage from './components/pages/auth/AuthPage.jsx'
 import Workspace from './components/pages/auth/Workspace.jsx'
+import AcceptInvitation from './components/pages/auth/Dashboard/AcceptInvitation.jsx';
 
 
 const Home = lazy(() => import('./components/pages/home/Home.jsx'))
@@ -49,6 +50,7 @@ function AppRoutes() {
             <Route path="/auth/staff-dashboard" element={<StaffDashboard />} />
             <Route path="/auth/workspace-dashboard" element={<WorkspaceDashboard />} />
             <Route path="/login-as/:token" element={<LoginAsPage />} />
+            <Route path="/invitations/accept/:token" element={<AcceptInvitation />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/faq" element={<FAQ />} />
