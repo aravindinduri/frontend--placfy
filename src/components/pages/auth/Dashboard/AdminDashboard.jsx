@@ -10,6 +10,7 @@ import {
 import AgreementsPage from "../../admin/agreements/AgreementsPage";
 import SettingsPage from "../../admin/SettingsPage";
 import SupportPage from "../../admin/Support/SupportPage";
+import AnalyticsPage from "../../admin/AnalyticsPage";
 import InvitationModal from "./InvitationModal";
 import AddEmployeeModal from "./AddEmployeeModal";
 
@@ -800,7 +801,7 @@ export default function AdminDashboard() {
           <SidebarLink icon={<FileText size={20} />} label="Agreements" active={activeView === 'agreements'} onClick={() => setActiveView('agreements')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<MessageSquare size={20} />} label="Support" active={activeView === 'support'} onClick={() => setActiveView('support')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Settings size={20} />} label="Settings" active={activeView === 'settings'} onClick={() => setActiveView('settings')} sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<BarChart3 size={20} />} label="Analytics" sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<BarChart3 size={20} />} label="Analytics" active={activeView === 'analytics'} onClick={() => setActiveView('analytics')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Megaphone size={20} />} label="Marketing" sidebarOpen={sidebarOpen} />
         </nav>
 
@@ -896,6 +897,10 @@ export default function AdminDashboard() {
         ) : activeView === 'support' ? (
           <div className="flex-1 pb-6 overflow-hidden flex flex-col">
             <SupportPage />
+          </div>
+        ) : activeView === 'analytics' ? (
+          <div className="flex-1 pb-6 overflow-hidden flex flex-col">
+            <AnalyticsPage />
           </div>
         ) : activeView === 'settings' ? (
           <div className="flex-1 pb-6 overflow-hidden flex flex-col">

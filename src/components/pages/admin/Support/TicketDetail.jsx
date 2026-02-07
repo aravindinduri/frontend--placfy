@@ -12,11 +12,13 @@ const TicketDetail = ({ ticketId, onBack, workspaceSlug }) => {
     const [isInternal, setIsInternal] = useState(false);
     const [files, setFiles] = useState([]);
     const [submitting, setSubmitting] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
     const fileInputRef = useRef(null);
     const commentsEndRef = useRef(null);
 
     useEffect(() => {
         fetchTicketDetails();
+        fetchCurrentUser();
     }, [ticketId]);
 
     useEffect(() => {
@@ -27,6 +29,25 @@ const TicketDetail = ({ ticketId, onBack, workspaceSlug }) => {
 
     const scrollToBottom = () => {
         commentsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const fetchCurrentUser = async () => {
+        try {
+            const sessionToken = getSessionToken();
+            const token = sessionToken || getStoredToken();
+            if (!token) return;
+
+            const response = await fetch("http://localhost:8000/api/v1/profile/account_settings/", {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setCurrentUser(data);
+            }
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+        }
     };
 
     const fetchTicketDetails = async () => {
@@ -191,80 +212,38 @@ const TicketDetail = ({ ticketId, onBack, workspaceSlug }) => {
                     {/* MAIN CHAT AREA */}
                     <div className="flex-1 flex flex-col min-w-0">
                         <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                            {/* ORIGINAL TICKET DESCRIPTION */}
-                            <div className="flex gap-4">
-                                <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
-                                    <User size={20} className="text-indigo-600" />
-                                </div>
-                                <div className="flex-1 max-w-3xl">
-                                    <div className="flex items-baseline gap-2 mb-1">
-                                        <span className="font-bold text-slate-800">{ticket.created_by_details?.username || ticket.created_by_details?.email || 'Unknown User'}</span>
-                                        <span className="text-xs text-slate-400">reported this</span>
-                                        <span className="text-xs text-slate-400">{new Date(ticket.created_at).toLocaleString()}</span>
-                                    </div>
-                                    <div className="bg-white p-5 rounded-[2rem] rounded-tl-none shadow-sm border border-slate-200 text-slate-700 leading-relaxed whitespace-pre-wrap">
-                                        {ticket.description}
-                                    </div>
-
-                                    {/* TICKET ATTACHMENTS (NON-COMMENT) */}
-                                    {ticket.attachments && ticket.attachments.filter(a => !a.uploaded_by_details).length > 0 && (
-                                        <div className="mt-3 flex flex-wrap gap-2">
-                                            {ticket.attachments.filter(a => !a.uploaded_by_details).map(file => (
-                                                <a key={file.id} href={file.file} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:text-indigo-600 hover:border-indigo-200 transition-colors">
-                                                    <Paperclip size={14} />
-                                                    {file.file_name} ({file.file_size_mb} MB)
-                                                </a>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* SEPARATOR */}
+                            {/* CONVERSATION START SEPARATOR */}
                             <div className="relative flex py-4 items-center">
                                 <div className="flex-grow border-t border-slate-200"></div>
-                                <span className="flex-shrink-0 mx-4 text-xs font-bold text-slate-300 uppercase tracking-widest">Conversation Started</span>
+                                <span className="flex-shrink-0 mx-4 text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Conversation Started</span>
                                 <div className="flex-grow border-t border-slate-200"></div>
                             </div>
 
-                            {/* COMMENTS */}
-                            {ticket.comments && ticket.comments.map((comment) => (
-                                <div key={comment.id} className={`flex gap-4 ${comment.is_internal ? 'bg-yellow-50/50 -mx-6 px-6 py-4 border-y border-yellow-100' : ''}`}>
-                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${comment.created_by_details?.id === ticket.created_by ? 'bg-indigo-100' : 'bg-emerald-100'
-                                        }`}>
-                                        <span className={`font-bold ${comment.created_by_details?.id === ticket.created_by ? 'text-indigo-600' : 'text-emerald-600'
-                                            }`}>
-                                            {comment.created_by_details?.email?.[0]?.toUpperCase() || 'U'}
-                                        </span>
-                                    </div>
-                                    <div className="flex-1 max-w-3xl">
-                                        <div className="flex items-baseline gap-2 mb-1">
-                                            <span className="font-bold text-slate-800">
-                                                {comment.created_by_details.username || comment.created_by_details.email}
-                                            </span>
-                                            {comment.is_internal && <span className="bg-yellow-100 text-yellow-700 text-[10px] font-bold uppercase px-2 rounded-full">Internal Note</span>}
-                                            <span className="text-xs text-slate-400">{new Date(comment.created_at).toLocaleString()}</span>
-                                        </div>
-                                        <div className={`p-4 rounded-[2rem] text-slate-700 leading-relaxed whitespace-pre-wrap shadow-sm border ${comment.is_internal
-                                            ? 'bg-yellow-50 border-yellow-200'
-                                            : (comment.created_by_details.id === ticket.created_by ? 'bg-white rounded-tl-none border-slate-200' : 'bg-emerald-50 rounded-tl-none border-emerald-100')
-                                            }`}>
-                                            {comment.content}
-                                        </div>
+                            {/* MESSAGES LIST */}
+                            <div className="flex flex-col gap-8">
+                                {/* 1. ORIGINAL TICKET DESCRIPTION (AS FIRST MESSAGE) */}
+                                {ticket && (
+                                    <MessageBubble
+                                        message={{
+                                            id: 'original',
+                                            content: ticket.description,
+                                            created_at: ticket.created_at,
+                                            created_by_details: ticket.created_by_details,
+                                            attachments: ticket.attachments?.filter(a => !a.uploaded_by_details)
+                                        }}
+                                        isMe={currentUser && (ticket.created_by_details?.email === currentUser.email || ticket.created_by_details?.username === currentUser.username)}
+                                    />
+                                )}
 
-                                        {comment.attachments && comment.attachments.length > 0 && (
-                                            <div className="mt-2 flex flex-wrap gap-2">
-                                                {comment.attachments.map(att => (
-                                                    <a key={att.id} href={att.file} target="_blank" rel="noreferrer" className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:text-indigo-600 hover:border-indigo-200 transition-colors">
-                                                        <Paperclip size={14} />
-                                                        {att.file_name}
-                                                    </a>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
+                                {/* 2. COMMENTS */}
+                                {ticket.comments && ticket.comments.map((cmt) => (
+                                    <MessageBubble
+                                        key={cmt.id}
+                                        message={cmt}
+                                        isMe={currentUser && (cmt.created_by_details?.email === currentUser.email || cmt.created_by_details?.username === currentUser.username)}
+                                    />
+                                ))}
+                            </div>
                             <div ref={commentsEndRef} />
                         </div>
 
@@ -379,6 +358,70 @@ const TicketDetail = ({ ticketId, onBack, workspaceSlug }) => {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const MessageBubble = ({ message, isMe }) => {
+    const { content, created_at, created_by_details, is_internal, attachments } = message;
+
+    return (
+        <div className={`flex gap-3 ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
+            {/* Avatar */}
+            <div className="shrink-0 mt-auto">
+                <div className={`w-8 h-8 rounded-2xl flex items-center justify-center border-2 border-white shadow-sm overflow-hidden 
+                    ${isMe ? 'bg-indigo-600' : 'bg-slate-200'}`}>
+                    <img
+                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${created_by_details?.email || 'default'}`}
+                        alt=""
+                        className="w-full h-full object-cover"
+                    />
+                </div>
+            </div>
+
+            {/* Bubble Content Area */}
+            <div className={`flex flex-col max-w-[75%] ${isMe ? 'items-end' : 'items-start'}`}>
+                {/* Meta Header */}
+                <div className="flex items-center gap-2 mb-1 px-1">
+                    {!isMe && <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">{created_by_details?.username || 'Unknown'}</span>}
+                    {is_internal && <span className="bg-yellow-100 text-yellow-700 text-[8px] font-black uppercase px-2 py-0.5 rounded-full ring-1 ring-yellow-200">Internal Note</span>}
+                    <span className="text-[9px] font-bold text-slate-300">{new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
+
+                {/* The Bubble */}
+                <div className={`relative p-4 shadow-sm border transition-all hover:shadow-md
+                    ${isMe
+                        ? 'bg-indigo-600 border-indigo-500 text-white rounded-[1.5rem] rounded-tr-none'
+                        : is_internal
+                            ? 'bg-yellow-50 border-yellow-200 text-slate-700 rounded-[1.5rem] rounded-tl-none'
+                            : 'bg-white border-slate-200 text-slate-700 rounded-[1.5rem] rounded-tl-none'
+                    }`}>
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{content}</p>
+
+                    {/* Attachments inside bubble or right below */}
+                    {attachments && attachments.length > 0 && (
+                        <div className="mt-3 flex flex-col gap-2 border-t border-white/20 pt-3">
+                            {attachments.map(file => (
+                                <a
+                                    key={file.id}
+                                    href={file.file}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className={`flex items-center gap-2 p-2 rounded-xl text-[10px] font-bold transition-colors
+                                        ${isMe
+                                            ? 'bg-white/10 text-white hover:bg-white/20'
+                                            : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-100'
+                                        }`}
+                                >
+                                    <Paperclip size={12} />
+                                    <span className="truncate max-w-[150px]">{file.file_name}</span>
+                                    {file.file_size_mb && <span className="opacity-60">({file.file_size_mb}MB)</span>}
+                                </a>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
