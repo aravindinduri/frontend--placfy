@@ -5,10 +5,11 @@ import {
   Search, ShoppingBag, Users, Box, LayoutDashboard,
   BarChart3, Megaphone, LogOut, Bell, ArrowRight,
   Plus, Filter, MoreHorizontal, TrendingUp, Package, CreditCard,
-  UserPlus, Mail, ShieldCheck, Trash2, Edit, ChevronsLeft, ChevronsRight, Eye, X, FileText, Settings
+  UserPlus, Mail, ShieldCheck, Trash2, Edit, ChevronsLeft, ChevronsRight, Eye, X, FileText, Settings, MessageSquare
 } from "lucide-react";
 import AgreementsPage from "../../admin/agreements/AgreementsPage";
 import SettingsPage from "../../admin/SettingsPage";
+import SupportPage from "../../admin/Support/SupportPage";
 import InvitationModal from "./InvitationModal";
 import AddEmployeeModal from "./AddEmployeeModal";
 
@@ -797,6 +798,7 @@ export default function AdminDashboard() {
           <SidebarLink icon={<Users size={20} />} label="manage members" active={activeView === 'manage-members'} onClick={() => setActiveView('manage-members')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Box size={20} />} label=" Employees " active={activeView === 'employees'} onClick={() => setActiveView('employees')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<FileText size={20} />} label="Agreements" active={activeView === 'agreements'} onClick={() => setActiveView('agreements')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<MessageSquare size={20} />} label="Support" active={activeView === 'support'} onClick={() => setActiveView('support')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Settings size={20} />} label="Settings" active={activeView === 'settings'} onClick={() => setActiveView('settings')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<BarChart3 size={20} />} label="Analytics" sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Megaphone size={20} />} label="Marketing" sidebarOpen={sidebarOpen} />
@@ -891,8 +893,14 @@ export default function AdminDashboard() {
           <EmployeeView />
         ) : activeView === 'agreements' ? (
           <AgreementsPage />
+        ) : activeView === 'support' ? (
+          <div className="flex-1 pb-6 overflow-hidden flex flex-col">
+            <SupportPage />
+          </div>
         ) : activeView === 'settings' ? (
-          <SettingsPage />
+          <div className="flex-1 pb-6 overflow-hidden flex flex-col">
+            <SettingsPage />
+          </div>
         ) : null}
       </main>
     </div>
