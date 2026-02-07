@@ -13,12 +13,15 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+import SettingsPage from "../../admin/SettingsPage";
+
 export default function HRRecruiterDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  
+  const [activeView, setActiveView] = useState('dashboard');
+
   return (
     <div className="h-screen w-full bg-[#EEF2FF] flex font-sans overflow-hidden p-4">
-      
+
       {/* SIDEBAR */}
       <aside className={`fixed left-0 top-0 h-screen bg-indigo-600 rounded-none flex flex-col p-4 shrink-0 hidden lg:flex shadow-2xl overflow-hidden transition-all duration-300 z-50 ${sidebarOpen ? 'w-64' : 'w-24'}`}>
         <div className="flex flex-col items-center gap-4 mb-8">
@@ -39,11 +42,11 @@ export default function HRRecruiterDashboard() {
 
         <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-hide">
           {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-8">Management</p>}
-          <SidebarLink icon={<LayoutDashboard size={20}/>} label="Dashboard" active={true} onClick={() => {}} sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<Users size={20}/>} label="Candidates" onClick={() => {}} sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<Briefcase size={20}/>} label="Jobs" onClick={() => {}} sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<Calendar size={20}/>} label="Interviews" onClick={() => {}} sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<Settings size={20}/>} label="Settings" onClick={() => {}} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<LayoutDashboard size={20} />} label="Dashboard" active={activeView === 'dashboard'} onClick={() => setActiveView('dashboard')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Users size={20} />} label="Candidates" onClick={() => { }} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Briefcase size={20} />} label="Jobs" onClick={() => { }} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Calendar size={20} />} label="Interviews" onClick={() => { }} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Settings size={20} />} label="Settings" active={activeView === 'settings'} onClick={() => setActiveView('settings')} sidebarOpen={sidebarOpen} />
         </nav>
 
         <div className="mt-auto pt-6 border-t border-indigo-400/30">
@@ -66,7 +69,7 @@ export default function HRRecruiterDashboard() {
       </aside>
 
       <main className={`flex-1 flex flex-col h-full overflow-hidden px-8 transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-24'}`}>
-        
+
         {/* TOP BAR */}
         <header className="py-6 flex items-center justify-between shrink-0">
           <h1 className="text-2xl font-black text-slate-800 tracking-tight uppercase">HR Recruiter Dashboard</h1>
@@ -89,31 +92,32 @@ export default function HRRecruiterDashboard() {
         </header>
 
         {/* CONTENT */}
-        <div className="flex-1 flex gap-8 min-h-0 pb-6 overflow-hidden">
-          <div className="flex-1 flex flex-col gap-6 min-w-0 overflow-y-auto pr-2">
-          
-          {/* GREETING */}
-          <div className="bg-[#5a4fff] rounded-2xl p-6 text-white flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-bold">
-                Hello HR 👋
-              </h2>
-              <p className="text-white/80 mt-1 text-sm">
-                You have 9 new applications today
-              </p>
-            </div>
+        {activeView === 'dashboard' ? (
+          <div className="flex-1 flex gap-8 min-h-0 pb-6 overflow-hidden">
+            <div className="flex-1 flex flex-col gap-6 min-w-0 overflow-y-auto pr-2">
 
-            <button className="bg-white text-[#5a4fff] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100">
-              View Applications
-            </button>
-          </div>
+              {/* GREETING */}
+              <div className="bg-[#5a4fff] rounded-2xl p-6 text-white flex justify-between items-center">
+                <div>
+                  <h2 className="text-xl font-bold">
+                    Hello HR 👋
+                  </h2>
+                  <p className="text-white/80 mt-1 text-sm">
+                    You have 9 new applications today
+                  </p>
+                </div>
 
-          {/* STATS */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Stat title="Total Candidates" value="1,245" />
-            <Stat title="Open Positions" value="42" />
-            <Stat title="Interviews Today" value="18" />
-          </div>
+                <button className="bg-white text-[#5a4fff] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100">
+                  View Applications
+                </button>
+              </div>
+
+              {/* STATS */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Stat title="Total Candidates" value="1,245" />
+                <Stat title="Open Positions" value="42" />
+                <Stat title="Interviews Today" value="18" />
+              </div>
 
               <button className="bg-white text-indigo-600 px-6 py-2 rounded-lg text-sm font-bold hover:bg-slate-100 transition-colors">
                 View Applications
@@ -129,7 +133,7 @@ export default function HRRecruiterDashboard() {
 
             {/* TABLE + PROFILE */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
-              
+
               {/* TABLE */}
               <div className="lg:col-span-2 bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm flex flex-col min-h-0">
                 <h3 className="text-lg font-black text-slate-800 mb-6 shrink-0">
@@ -183,18 +187,20 @@ export default function HRRecruiterDashboard() {
 
             </div>
           </div>
-        </div>
-      </main>
-    </div>
+        ) : activeView === 'settings' ? (
+          <SettingsPage />
+        ) : null}
+      </main >
+    </div >
   );
 }
 
 /* --- REUSABLE ATOMS --- */
 function SidebarLink({ icon, label, active, onClick, sidebarOpen }) {
   return (
-    <div 
-      className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all shrink-0 ${sidebarOpen ? '' : 'justify-center px-3'} ${active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'}`} 
-      onClick={onClick} 
+    <div
+      className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all shrink-0 ${sidebarOpen ? '' : 'justify-center px-3'} ${active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'}`}
+      onClick={onClick}
       title={!sidebarOpen ? label : ''}
     >
       <span className={active ? "text-white" : "text-indigo-300"}>{icon}</span>

@@ -6,8 +6,11 @@ import {
   Mail, UserPlus, TrendingUp, Filter, ChevronsLeft, ChevronsRight
 } from "lucide-react";
 
+import SettingsPage from "../../admin/SettingsPage";
+
 export default function RecruiterDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [activeView, setActiveView] = useState('dashboard');
   const [recruiterName] = useState("Alex Rivers");
   const [stats] = useState({
     openJobs: "12",
@@ -19,7 +22,7 @@ export default function RecruiterDashboard() {
   return (
     // Main Container: h-screen prevents full-page scroll, providing an "App" feel
     <div className="h-screen w-full bg-[#EEF2FF] flex font-sans overflow-hidden p-4">
-      
+
       {/* SIDEBAR */}
       <aside className={`fixed left-0 top-0 h-screen bg-indigo-600 rounded-none flex flex-col p-4 shrink-0 hidden lg:flex shadow-2xl overflow-hidden transition-all duration-300 z-50 ${sidebarOpen ? 'w-64' : 'w-24'}`}>
         <div className="flex flex-col items-center gap-4 mb-8">
@@ -40,22 +43,23 @@ export default function RecruiterDashboard() {
 
         <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-hide">
           {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-8">Management</p>}
-          <SidebarLink icon={<LayoutDashboard size={20}/>} label="Overview" active={true} sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<Briefcase size={20}/>} label="Job Pipelines" sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<Users size={20}/>} label="Candidates" sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<CalendarDays size={20}/>} label="Schedule" sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<Mail size={20}/>} label="Communications" sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<LayoutDashboard size={20} />} label="Overview" active={activeView === 'dashboard'} onClick={() => setActiveView('dashboard')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Briefcase size={20} />} label="Job Pipelines" onClick={() => { }} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Users size={20} />} label="Candidates" onClick={() => { }} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<CalendarDays size={20} />} label="Schedule" onClick={() => { }} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Mail size={20} />} label="Communications" onClick={() => { }} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Settings size={20} />} label="Settings" active={activeView === 'settings'} onClick={() => setActiveView('settings')} sidebarOpen={sidebarOpen} />
         </nav>
 
         <div className="mt-auto pt-6 border-t border-indigo-400/30">
           {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-4">Workspace</p>}
           {sidebarOpen && (
             <div className="flex items-center justify-between px-4 py-3 bg-white/10 rounded-2xl text-white border border-white/10 cursor-pointer hover:bg-white/20 transition-all group">
-               <div className="flex flex-col overflow-hidden">
-                 <span className="text-xs font-black truncate">{recruiterName}</span>
-                 <span className="text-[10px] text-indigo-200 font-bold opacity-70">Talent Lead</span>
-               </div>
-               <ArrowRight size={16} className="shrink-0 group-hover:translate-x-1 transition-transform" />
+              <div className="flex flex-col overflow-hidden">
+                <span className="text-xs font-black truncate">{recruiterName}</span>
+                <span className="text-[10px] text-indigo-200 font-bold opacity-70">Talent Lead</span>
+              </div>
+              <ArrowRight size={16} className="shrink-0 group-hover:translate-x-1 transition-transform" />
             </div>
           )}
           {sidebarOpen && (
@@ -68,17 +72,17 @@ export default function RecruiterDashboard() {
 
       {/* MAIN CONTENT AREA */}
       <main className={`flex-1 flex flex-col h-full overflow-hidden px-8 transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-24'}`}>
-        
+
         {/* HEADER */}
         <header className="py-6 flex items-center justify-between shrink-0">
           <h1 className="text-2xl font-black text-slate-800 tracking-tight">Recruiter Dashboard</h1>
-          
+
           <div className="flex items-center gap-6 bg-white/60 p-1.5 rounded-[2rem] border border-white/80 shadow-sm backdrop-blur-md">
             <div className="relative group hidden md:block">
               <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
               <input type="text" placeholder="Find candidates..." className="bg-transparent py-2.5 pl-12 pr-4 text-sm outline-none w-48 focus:w-64 transition-all" />
             </div>
-            
+
             <div className="flex items-center gap-3 px-4 border-l border-slate-200/60">
               <button className="p-2 text-slate-500 hover:bg-indigo-50 rounded-full transition-colors relative">
                 <Bell size={20} />
@@ -86,7 +90,7 @@ export default function RecruiterDashboard() {
               </button>
               <div className="flex items-center gap-3 ml-2 pl-4 border-l border-slate-200/60">
                 <div className="w-10 h-10 bg-indigo-100 rounded-2xl border-2 border-white shadow-md overflow-hidden ring-4 ring-indigo-50">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" alt="user" />
+                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" alt="user" />
                 </div>
               </div>
             </div>
@@ -94,13 +98,14 @@ export default function RecruiterDashboard() {
         </header>
 
         {/* CONTENT GRID */}
-        <div className="flex-1 flex gap-8 min-h-0 pb-6">
-          
-          {/* LEFT SCROLLABLE SECTION */}
-          <div className="flex-[2.2] flex flex-col gap-6 overflow-y-auto pr-2 scrollbar-hide">
-            
-            {/* WELCOME BANNER */}
-            {/* <div className="relative bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-[3rem] p-8 text-white shadow-2xl overflow-hidden shrink-0">
+        {activeView === 'dashboard' ? (
+          <div className="flex-1 flex gap-8 min-h-0 pb-6">
+
+            {/* LEFT SCROLLABLE SECTION */}
+            <div className="flex-[2.2] flex flex-col gap-6 overflow-y-auto pr-2 scrollbar-hide">
+
+              {/* WELCOME BANNER */}
+              {/* <div className="relative bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-[3rem] p-8 text-white shadow-2xl overflow-hidden shrink-0">
               <div className="relative z-10 max-w-md">
                 <h2 className="text-3xl font-black mb-2">Welcome back, {recruiterName.split(' ')[0]}!</h2>
                 <p className="text-indigo-100 font-medium text-sm mb-6 leading-relaxed">
@@ -116,105 +121,110 @@ export default function RecruiterDashboard() {
                 </div>
               </div> */}
               <div className="absolute bottom-[-10%] right-[5%] opacity-10">
-                 <Briefcase size={180} />
+                <Briefcase size={180} />
               </div>
-            {/* </div> */}
+              {/* </div> */}
 
-            {/* RECRUITMENT STATS */}
-            <div className="grid grid-cols-4 gap-4 shrink-0">
-              <StatCard title="Open Jobs" value={stats.openJobs} change="+1" icon={<Briefcase className="text-indigo-600" size={20}/>}/>
-              <StatCard title="Candidates" value={stats.candidates} change="+24" icon={<Users className="text-indigo-600" size={20}/>}/>
-              <StatCard title="Interviews" value={stats.interviews} change="Today" icon={<CalendarDays className="text-indigo-600" size={20}/>}/>
-              <StatCard title="Monthly Hires" value={stats.hired} change="82%" icon={<CheckCircle className="text-indigo-600" size={20}/>}/>
-            </div>
+              {/* RECRUITMENT STATS */}
+              <div className="grid grid-cols-4 gap-4 shrink-0">
+                <StatCard title="Open Jobs" value={stats.openJobs} change="+1" icon={<Briefcase className="text-indigo-600" size={20} />} />
+                <StatCard title="Candidates" value={stats.candidates} change="+24" icon={<Users className="text-indigo-600" size={20} />} />
+                <StatCard title="Interviews" value={stats.interviews} change="Today" icon={<CalendarDays className="text-indigo-600" size={20} />} />
+                <StatCard title="Monthly Hires" value={stats.hired} change="82%" icon={<CheckCircle className="text-indigo-600" size={20} />} />
+              </div>
 
-            {/* LIVE FEED */}
-            <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 flex-1">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="font-black text-slate-800 text-lg">Recruitment Activity</h3>
-                <div className="flex gap-2">
-                    <button className="p-2 bg-slate-50 text-slate-400 rounded-xl hover:text-indigo-600 transition-colors"><Filter size={16}/></button>
+              {/* LIVE FEED */}
+              <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 flex-1">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="font-black text-slate-800 text-lg">Recruitment Activity</h3>
+                  <div className="flex gap-2">
+                    <button className="p-2 bg-slate-50 text-slate-400 rounded-xl hover:text-indigo-600 transition-colors"><Filter size={16} /></button>
                     <button className="text-indigo-600 font-black text-[10px] uppercase px-3 py-1.5 bg-indigo-50 rounded-lg">Live Feed</button>
+                  </div>
+                </div>
+                <div className="space-y-6">
+                  <ActivityItem text="New application: Senior Frontend Dev" time="Just Now" status="Review" color="bg-indigo-400" />
+                  <ActivityItem text="Interview scheduled: Product Designer" time="2h ago" status="Confirmed" color="bg-emerald-400" />
+                  <ActivityItem text="Offer sent: Backend Engineer" time="4h ago" status="Pending" color="bg-orange-400" />
+                  <ActivityItem text="Candidate rejected: Sales Lead" time="Yesterday" status="Closed" color="bg-slate-300" />
                 </div>
               </div>
-              <div className="space-y-6">
-                <ActivityItem text="New application: Senior Frontend Dev" time="Just Now" status="Review" color="bg-indigo-400" />
-                <ActivityItem text="Interview scheduled: Product Designer" time="2h ago" status="Confirmed" color="bg-emerald-400" />
-                <ActivityItem text="Offer sent: Backend Engineer" time="4h ago" status="Pending" color="bg-orange-400" />
-                <ActivityItem text="Candidate rejected: Sales Lead" time="Yesterday" status="Closed" color="bg-slate-300" />
-              </div>
             </div>
-          </div>
 
-          {/* RIGHT FIXED WIDGETS */}
-          <div className="flex-1 flex flex-col gap-6 min-w-[300px]">
-             
-             {/* PERFORMANCE MINI CHART PLACEHOLDER */}
-             <div className="bg-slate-900 rounded-[2.5rem] p-6 shadow-xl flex flex-col gap-4 text-white shrink-0">
+            {/* RIGHT FIXED WIDGETS */}
+            <div className="flex-1 flex flex-col gap-6 min-w-[300px]">
+
+              {/* PERFORMANCE MINI CHART PLACEHOLDER */}
+              <div className="bg-slate-900 rounded-[2.5rem] p-6 shadow-xl flex flex-col gap-4 text-white shrink-0">
                 <div className="flex justify-between items-start">
-                    <div>
-                        <p className="text-[10px] font-black text-indigo-300 uppercase tracking-widest">Hiring Success</p>
-                        <h4 className="text-2xl font-black">94.2%</h4>
-                    </div>
-                    <div className="p-2 bg-white/10 rounded-xl">
-                        <TrendingUp size={20} className="text-emerald-400" />
-                    </div>
+                  <div>
+                    <p className="text-[10px] font-black text-indigo-300 uppercase tracking-widest">Hiring Success</p>
+                    <h4 className="text-2xl font-black">94.2%</h4>
+                  </div>
+                  <div className="p-2 bg-white/10 rounded-xl">
+                    <TrendingUp size={20} className="text-emerald-400" />
+                  </div>
                 </div>
                 <div className="h-12 flex items-end gap-1">
-                    {[40, 70, 45, 90, 65, 80, 95].map((h, i) => (
-                        <div key={i} style={{height: `${h}%`}} className="flex-1 bg-indigo-500/40 rounded-t-sm" />
-                    ))}
+                  {[40, 70, 45, 90, 65, 80, 95].map((h, i) => (
+                    <div key={i} style={{ height: `${h}%` }} className="flex-1 bg-indigo-500/40 rounded-t-sm" />
+                  ))}
                 </div>
-             </div>
+              </div>
 
-             {/* CALENDAR */}
-             <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100 shrink-0">
+              {/* CALENDAR */}
+              <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100 shrink-0">
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-black text-slate-800 text-sm">Oct, 2026</span>
                   <div className="flex gap-1">
-                    <ArrowRight size={14} className="rotate-180 text-slate-300"/>
-                    <ArrowRight size={14} className="text-slate-300"/>
+                    <ArrowRight size={14} className="rotate-180 text-slate-300" />
+                    <ArrowRight size={14} className="text-slate-300" />
                   </div>
                 </div>
                 <div className="grid grid-cols-7 text-center text-[9px] font-black text-slate-300 gap-y-3">
-                  {['S','M','T','W','T','F','S'].map(d => <div key={d}>{d}</div>)}
-                  {Array.from({length: 31}).map((_, i) => (
+                  {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(d => <div key={d}>{d}</div>)}
+                  {Array.from({ length: 31 }).map((_, i) => (
                     <div key={i} className={`py-1 text-[11px] font-bold ${i === 11 ? 'bg-indigo-600 text-white rounded-lg shadow-md' : 'text-slate-600'}`}>
-                      {i+1}
+                      {i + 1}
                     </div>
                   ))}
                 </div>
-             </div>
+              </div>
 
-             {/* QUICK ACTIONS */}
-             <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100 flex-1 flex flex-col">
+              {/* QUICK ACTIONS */}
+              <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100 flex-1 flex flex-col">
                 <h4 className="font-black text-slate-800 mb-4 text-center">Pipeline Health</h4>
                 <div className="space-y-4 flex-1">
-                    <div className="space-y-1">
-                        <div className="flex justify-between text-[10px] font-black uppercase">
-                            <span className="text-slate-400">Sourcing</span>
-                            <span className="text-slate-800">75%</span>
-                        </div>
-                        <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-indigo-500 w-[75%]" />
-                        </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[10px] font-black uppercase">
+                      <span className="text-slate-400">Sourcing</span>
+                      <span className="text-slate-800">75%</span>
                     </div>
-                    <div className="space-y-1">
-                        <div className="flex justify-between text-[10px] font-black uppercase">
-                            <span className="text-slate-400">Interviewing</span>
-                            <span className="text-slate-800">42%</span>
-                        </div>
-                        <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-emerald-400 w-[42%]" />
-                        </div>
+                    <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-indigo-500 w-[75%]" />
                     </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[10px] font-black uppercase">
+                      <span className="text-slate-400">Interviewing</span>
+                      <span className="text-slate-800">42%</span>
+                    </div>
+                    <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-400 w-[42%]" />
+                    </div>
+                  </div>
                 </div>
                 <button className="w-full mt-6 bg-slate-900 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-colors">
                   Generate Report
                 </button>
-             </div>
+              </div>
+            </div>
           </div>
-        </div>
+        ) : activeView === 'settings' ? (
+          <div className="flex-1 pb-6 overflow-hidden flex flex-col">
+            <SettingsPage />
+          </div>
+        ) : null}
       </main>
     </div>
   );
@@ -224,9 +234,9 @@ export default function RecruiterDashboard() {
 
 function SidebarLink({ icon, label, active, onClick, sidebarOpen }) {
   return (
-    <div 
-      className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all shrink-0 ${sidebarOpen ? '' : 'justify-center px-3'} ${active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'}`} 
-      onClick={onClick} 
+    <div
+      className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all shrink-0 ${sidebarOpen ? '' : 'justify-center px-3'} ${active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'}`}
+      onClick={onClick}
       title={!sidebarOpen ? label : ''}
     >
       <span className={active ? "text-white" : "text-indigo-300"}>{icon}</span>
