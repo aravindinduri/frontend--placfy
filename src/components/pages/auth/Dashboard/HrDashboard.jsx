@@ -7,67 +7,94 @@ import {
   Settings,
   Search,
   Bell,
+  ChevronsLeft,
+  ChevronsRight,
+  LogOut,
+  ArrowRight,
+  Box,
 } from "lucide-react";
 
-export default function AdminDashboard() {
+export default function HrDashboard() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  
   return (
-    <div className="min-h-screen bg-[#eef2ff] flex font-sans">
+    <div className="h-screen w-full bg-[#EEF2FF] flex font-sans overflow-hidden p-4">
       
-      {/* ================= SIDEBAR ================= */}
-      <aside className="w-64 bg-[#5a4fff] text-white flex flex-col">
-        <div className="px-6 py-6 text-2xl font-extrabold tracking-tight">
-          Placfy
+      {/* SIDEBAR */}
+      <aside className={`fixed left-0 top-0 h-screen bg-indigo-600 rounded-none flex flex-col p-4 shrink-0 hidden lg:flex shadow-2xl overflow-hidden transition-all duration-300 z-50 ${sidebarOpen ? 'w-64' : 'w-24'}`}>
+        <div className="flex flex-col items-center gap-4 mb-8">
+          <div className="flex items-center justify-center gap-2 w-full">
+            <div className="bg-white p-1.5 rounded-xl">
+              <div className="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black text-xs">P</div>
+            </div>
+            {sidebarOpen && <span className="text-2xl font-black tracking-tight text-white uppercase italic flex-1">Placfy</span>}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 text-white rounded-lg"
+              title={sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
+            >
+              {sidebarOpen ? <ChevronsLeft size={20} /> : <ChevronsRight size={20} />}
+            </button>
+          </div>
         </div>
 
-        <nav className="flex-1 px-4 space-y-1">
-          <SidebarItem icon={<LayoutDashboard size={18} />} label="Dashboard" active />
-          <SidebarItem icon={<Users size={18} />} label="Candidates" />
-          <SidebarItem icon={<Briefcase size={18} />} label="Jobs" />
-          <SidebarItem icon={<Calendar size={18} />} label="Interviews" />
-          <SidebarItem icon={<Settings size={18} />} label="Settings" />
+        <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-hide">
+          {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-8">Management</p>}
+          <SidebarLink icon={<LayoutDashboard size={20}/>} label="Dashboard" active={true} onClick={() => {}} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Users size={20}/>} label="Team Members" onClick={() => {}} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Box size={20}/>} label="Tasks" onClick={() => {}} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Briefcase size={20}/>} label="Jobs" onClick={() => {}} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Calendar size={20}/>} label="Calendar" onClick={() => {}} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Settings size={20}/>} label="Settings" onClick={() => {}} sidebarOpen={sidebarOpen} />
         </nav>
 
-        <div className="p-4">
-          <div className="bg-white/15 rounded-xl p-4 text-sm">
-            Upgrade to Premium
-          </div>
+        <div className="mt-auto pt-6 border-t border-indigo-400/30">
+          {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-4">Workspace</p>}
+          {sidebarOpen && (
+            <div className="flex items-center justify-between px-4 py-3 bg-white/10 rounded-2xl text-white border border-white/10 cursor-pointer hover:bg-white/20 transition-all group">
+              <div className="flex flex-col overflow-hidden">
+                <span className="text-xs font-black truncate">HR Department</span>
+                <span className="text-[10px] text-indigo-200 font-bold opacity-70">Enterprise</span>
+              </div>
+              <ArrowRight size={16} className="shrink-0 group-hover:translate-x-1 transition-transform" />
+            </div>
+          )}
+          {sidebarOpen && (
+            <button className="flex items-center gap-3 text-indigo-200 mt-6 font-bold text-sm hover:text-white transition-colors ml-4">
+              <LogOut size={18} /> Logout
+            </button>
+          )}
         </div>
       </aside>
 
-      {/* ================= MAIN ================= */}
-      <div className="flex-1 flex flex-col">
+      <div className={`flex-1 flex flex-col h-full overflow-hidden transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-24'}`}>
         
         {/* TOP BAR */}
-        <header className="bg-white px-8 py-4 flex items-center justify-between border-b border-slate-200">
-          <h1 className="text-xl font-bold text-slate-800">
-            Dashboard
-          </h1>
+        <header className="py-6 flex items-center justify-between shrink-0">
+          <h1 className="text-2xl font-black text-slate-800 tracking-tight uppercase">HR Dashboard</h1>
 
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Search
-                size={16}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-              />
-              <input
-                placeholder="Search"
-                className="pl-9 pr-4 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-[#5a4fff]"
-              />
+          <div className="flex items-center gap-6 bg-white/60 p-1.5 rounded-[2rem] border border-white/80 shadow-sm backdrop-blur-md">
+            <div className="relative group hidden md:block">
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input type="text" placeholder="Search..." className="bg-transparent py-2.5 pl-12 pr-4 text-sm outline-none w-48 focus:w-60 transition-all" />
             </div>
-
-            <Bell size={20} className="text-slate-500" />
-
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#5a4fff]" />
-              <span className="text-sm font-medium text-slate-700">
-                HR
-              </span>
+            
+            <div className="flex items-center gap-3 px-4 border-l border-slate-200/60">
+              <button className="p-2 text-slate-500 hover:bg-indigo-50 rounded-full transition-colors relative">
+                <Bell size={20} />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white"></span>
+              </button>
+              <div className="flex items-center gap-3 ml-2 pl-4 border-l border-slate-200/60">
+                <div className="w-10 h-10 bg-indigo-100 rounded-2xl border-2 border-white shadow-md overflow-hidden ring-4 ring-indigo-50">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=HR" alt="user" />
+                </div>
+              </div>
             </div>
           </div>
         </header>
 
-        {/* ================= CONTENT ================= */}
-        <main className="flex-1 p-8 space-y-8">
+        {/* CONTENT */}
+        <main className="flex-1 overflow-y-auto px-8 pb-6">
           
           {/* GREETING */}
           <div className="bg-[#5a4fff] rounded-2xl p-6 text-white flex justify-between items-center">
@@ -148,34 +175,40 @@ export default function AdminDashboard() {
   );
 }
 
-/* ================= UI PARTS ================= */
-
-const SidebarItem = ({ icon, label, active }) => (
-  <div
-    className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer text-sm
-      ${active ? "bg-white/20" : "hover:bg-white/15"}
-    `}
-  >
-    {icon}
-    {label}
-  </div>
-);
+/* --- REUSABLE ATOMS --- */
+function SidebarLink({ icon, label, active, onClick, sidebarOpen }) {
+  return (
+    <div 
+      className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all shrink-0 ${sidebarOpen ? '' : 'justify-center px-3'} ${active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'}`} 
+      onClick={onClick} 
+      title={!sidebarOpen ? label : ''}
+    >
+      <span className={active ? "text-white" : "text-indigo-300"}>{icon}</span>
+      {sidebarOpen && <span className="text-sm font-bold tracking-tight">{label}</span>}
+    </div>
+  );
+}
 
 const Stat = ({ title, value }) => (
-  <div className="bg-white rounded-2xl p-6 border border-slate-200">
-    <p className="text-xs text-slate-400 font-bold uppercase mb-1">
-      {title}
-    </p>
-    <p className="text-2xl font-extrabold text-slate-800">
-      {value}
-    </p>
+  <div className="bg-white p-5 rounded-[2rem] shadow-sm border border-slate-50 flex flex-col gap-3 hover:scale-[1.02] transition-transform">
+    <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center shrink-0">
+      <span className="text-indigo-600 font-black">📊</span>
+    </div>
+    <div>
+      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{title}</p>
+      <p className="text-xl font-black text-slate-800 mt-1">{value}</p>
+    </div>
   </div>
 );
 
 const TableRow = ({ name, status }) => (
-  <tr className="border-t border-slate-200">
-    <td className="py-3">{name}</td>
-    <td>{status}</td>
-    <td className="text-[#5a4fff] font-medium">In Progress</td>
+  <tr className="border-t border-slate-200 hover:bg-slate-50 transition-colors">
+    <td className="py-3 font-bold text-slate-700">{name}</td>
+    <td className="text-xs font-bold uppercase text-slate-600">
+      <span className="inline-block bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full">
+        {status}
+      </span>
+    </td>
+    <td className="text-indigo-600 font-bold text-sm">In Progress</td>
   </tr>
 );
