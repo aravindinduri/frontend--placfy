@@ -26,19 +26,37 @@ const SupportPage = () => {
             const sessionToken = getSessionToken();
             const token = sessionToken || getStoredToken();
 
-            // 1. Get Workspace Slug (assuming first workspace for admin)
-            const workspaceResponse = await fetch(
-                `http://localhost:8000/api/v1/workspaces/`,
-                { headers: { 'Authorization': `Bearer ${token}` } }
-            );
+            // 1. Try to get workspace from localStorage first
+            const storedWs = localStorage.getItem('currentWorkspace');
+            let slug = null;
 
-            if (workspaceResponse.ok) {
-                const workspaces = await workspaceResponse.json();
-                if (workspaces.length > 0) {
-                    const slug = workspaces[0].slug;
-                    setWorkspaceSlug(slug);
-                    await fetchTickets(slug, token);
+            if (storedWs) {
+                try {
+                    const wsData = JSON.parse(storedWs);
+                    slug = wsData.slug;
+                } catch (e) {
+                    console.error("Failed to parse stored workspace", e);
                 }
+            }
+
+            // 2. Fallback to API if not in localStorage or needs update
+            if (!slug) {
+                const workspaceResponse = await fetch(
+                    `http://localhost:8000/api/v1/workspaces/`,
+                    { headers: { 'Authorization': `Bearer ${token}` } }
+                );
+
+                if (workspaceResponse.ok) {
+                    const workspaces = await workspaceResponse.json();
+                    if (workspaces.length > 0) {
+                        slug = workspaces[0].slug;
+                    }
+                }
+            }
+
+            if (slug) {
+                setWorkspaceSlug(slug);
+                await fetchTickets(slug, token);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -221,9 +239,11 @@ const SupportPage = () => {
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px] font-bold">
-                                                        {ticket.created_by_details.email?.[0].toUpperCase()}
+                                                        {ticket.created_by_details?.email?.[0]?.toUpperCase() || 'U'}
                                                     </div>
-                                                    <span className="text-xs font-bold text-slate-600">{ticket.created_by_details.username}</span>
+                                                    <span className="text-xs font-bold text-slate-600">
+                                                        {ticket.created_by_details?.username || ticket.created_by_details?.email || 'Unknown'}
+                                                    </span>
                                                 </div>
                                             </td>
                                             <td className="py-4 px-6 text-xs font-bold text-slate-400">

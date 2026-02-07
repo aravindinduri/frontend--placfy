@@ -14,12 +14,17 @@ const CreateTicketModal = ({ isOpen, onClose, onTicketCreated, workspaceSlug }) 
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (isOpen) {
+        if (isOpen && workspaceSlug) {
             fetchMembers();
         }
-    }, [isOpen]);
+    }, [isOpen, workspaceSlug]);
 
     const fetchMembers = async () => {
+        if (!workspaceSlug) {
+            console.error("workspaceSlug is not available");
+            return;
+        }
+
         try {
             setFetchingMembers(true);
             const sessionToken = getSessionToken();
@@ -195,9 +200,9 @@ const CreateTicketModal = ({ isOpen, onClose, onTicketCreated, workspaceSlug }) 
                                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all appearance-none cursor-pointer disabled:opacity-50"
                                 >
                                     <option value="">-- Unassigned --</option>
-                                    {members.map(member => (
-                                        <option key={member.id} value={member.user.id}>
-                                            {member.user.username || member.user.email} ({member.role})
+                                    {(Array.isArray(members) ? members : (members?.results || [])).map(member => (
+                                        <option key={member?.id} value={member?.user?.id}>
+                                            {member?.user?.username || member?.user?.email || 'Unknown User'} ({member?.role || 'No Role'})
                                         </option>
                                     ))}
                                 </select>

@@ -198,7 +198,7 @@ const TicketDetail = ({ ticketId, onBack, workspaceSlug }) => {
                                 </div>
                                 <div className="flex-1 max-w-3xl">
                                     <div className="flex items-baseline gap-2 mb-1">
-                                        <span className="font-bold text-slate-800">{ticket.created_by_details.username}</span>
+                                        <span className="font-bold text-slate-800">{ticket.created_by_details?.username || ticket.created_by_details?.email || 'Unknown User'}</span>
                                         <span className="text-xs text-slate-400">reported this</span>
                                         <span className="text-xs text-slate-400">{new Date(ticket.created_at).toLocaleString()}</span>
                                     </div>
@@ -230,11 +230,11 @@ const TicketDetail = ({ ticketId, onBack, workspaceSlug }) => {
                             {/* COMMENTS */}
                             {ticket.comments && ticket.comments.map((comment) => (
                                 <div key={comment.id} className={`flex gap-4 ${comment.is_internal ? 'bg-yellow-50/50 -mx-6 px-6 py-4 border-y border-yellow-100' : ''}`}>
-                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${comment.created_by_details.id === ticket.created_by ? 'bg-indigo-100' : 'bg-emerald-100'
+                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${comment.created_by_details?.id === ticket.created_by ? 'bg-indigo-100' : 'bg-emerald-100'
                                         }`}>
-                                        <span className={`font-bold ${comment.created_by_details.id === ticket.created_by ? 'text-indigo-600' : 'text-emerald-600'
+                                        <span className={`font-bold ${comment.created_by_details?.id === ticket.created_by ? 'text-indigo-600' : 'text-emerald-600'
                                             }`}>
-                                            {comment.created_by_details.email?.[0].toUpperCase()}
+                                            {comment.created_by_details?.email?.[0]?.toUpperCase() || 'U'}
                                         </span>
                                     </div>
                                     <div className="flex-1 max-w-3xl">
@@ -341,11 +341,11 @@ const TicketDetail = ({ ticketId, onBack, workspaceSlug }) => {
                                 <label className="text-xs font-bold text-slate-500 block mb-1">Requester</label>
                                 <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-full bg-indigo-50 border border-indigo-100">
-                                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${ticket.created_by_details.email}`} alt="" />
+                                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${ticket.created_by_details?.email || 'default'}`} alt="" />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-bold text-slate-800">{ticket.created_by_details.username}</p>
-                                        <p className="text-xs text-slate-400">{ticket.created_by_details.email}</p>
+                                        <p className="text-sm font-bold text-slate-800">{ticket.created_by_details?.username || 'Unknown'}</p>
+                                        <p className="text-xs text-slate-400">{ticket.created_by_details?.email || 'No email'}</p>
                                     </div>
                                 </div>
                             </div>
