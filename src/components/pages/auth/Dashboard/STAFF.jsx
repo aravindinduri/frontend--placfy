@@ -1,199 +1,15 @@
 
-// import { useState } from "react";
-// import {
-//   Search,
-//   ClipboardList,
-//   Clock,
-//   CheckCircle,
-//   Bell,
-//   LayoutDashboard,
-//   LogOut,
-//   ArrowRight,
-//   Calendar,
-//   MessageSquare,
-//   Settings,
-//   Briefcase
-// } from "lucide-react";
-
-// export default function StaffDashboard() {
-//   const [stats] = useState({
-//     tasks: "14",
-//     completed: "9",
-//     hours: "7h 30m",
-//     notifications: "3",
-//   });
-
-//   return (
-//     <div className="min-h-screen w-full bg-slate-50 flex font-sans overflow-hidden">
-      
-//       {/* SIDEBAR - Indigo Background */}
-//       <aside className="w-64 bg-indigo-600 flex flex-col p-8 shrink-0 hidden lg:flex">
-//         {/* Branding */}
-//         <div className="flex items-center gap-2 mb-10">
-//           <div className="bg-white p-1.5 rounded-lg">
-//             <div className="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center text-white font-black text-xs">P</div>
-//           </div>
-//           <span className="text-2xl font-black tracking-tight text-white">Placfy</span>
-//         </div>
-
-//         {/* Staff Navigation */}
-//         <nav className="space-y-1 flex-1">
-//           <p className="text-[11px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-4">Workspace</p>
-//           <SidebarLink icon={<LayoutDashboard size={20}/>} label="My Overview" active />
-//           <SidebarLink icon={<ClipboardList size={20}/>} label="Assignments" />
-//           <SidebarLink icon={<Calendar size={20}/>} label="Schedule" />
-//           <SidebarLink icon={<Briefcase size={20}/>} label="Projects" />
-//           <SidebarLink icon={<MessageSquare size={20}/>} label="Team Chat" />
-          
-//           <div className="pt-8">
-//             <p className="text-[11px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-4">Current Unit</p>
-//             {/* Show workspace name and Arrow icon */}
-//             <div className="flex items-center justify-between px-4 py-3 bg-white/10 rounded-2xl text-white border border-white/10 cursor-pointer hover:bg-white/20 transition-all">
-//                <span className="text-xs font-bold truncate">Operations Team</span>
-//                <ArrowRight size={14} className="shrink-0" />
-//             </div>
-//           </div>
-//         </nav>
-
-//         {/* Bottom Section */}
-//         <div className="mt-auto pt-4 border-t border-indigo-500/50 space-y-1">
-//           <SidebarLink icon={<Settings size={20}/>} label="Settings" />
-//           <SidebarLink icon={<LogOut size={20}/>} label="Logout" />
-//         </div>
-//       </aside>
-
-//       {/* MAIN CONTENT AREA */}
-//       <main className="flex-1 overflow-y-auto">
-//         {/* HEADER */}
-//         <header className="bg-white border-b border-slate-100 px-8 py-5 flex items-center justify-between sticky top-0 z-10">
-//           <h1 className="text-xl font-extrabold text-slate-900 tracking-tight uppercase">
-//             Staff Dashboard
-//           </h1>
-
-//           <div className="flex items-center gap-6">
-//             <div className="relative w-72 hidden md:block">
-//               <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-//               <input
-//                 type="text"
-//                 placeholder="Search tasks or updates..."
-//                 className="w-full rounded-xl bg-slate-50 border border-slate-200 py-2 pl-10 pr-4 text-sm outline-none focus:border-indigo-500 focus:bg-white transition-all"
-//               />
-//             </div>
-            
-//             <div className="flex items-center gap-2">
-//               <button className="p-2 text-slate-400 hover:text-indigo-600 transition-colors relative">
-//                 <Bell size={22} />
-//                 <span className="absolute top-2 right-2 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white"></span>
-//               </button>
-//               <div className="h-8 w-[1px] bg-slate-100 mx-2"></div>
-//               <button className="flex items-center gap-2 bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl text-xs font-black border border-emerald-100 hover:bg-emerald-100 transition-all">
-//                 <Clock size={16} /> Clock Out
-//               </button>
-//             </div>
-//           </div>
-//         </header>
-
-//         {/* DASHBOARD CONTENT */}
-//         <div className="max-w-7xl mx-auto px-8 py-8 space-y-8">
-          
-//           {/* STATS GRID */}
-//           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-//             <StatCard
-//               title="Assigned Tasks"
-//               value={stats.tasks}
-//               icon={<ClipboardList size={20} />}
-//             />
-//             <StatCard
-//               title="Completed"
-//               value={stats.completed}
-//               icon={<CheckCircle size={20} />}
-//             />
-//             <StatCard
-//               title="Work Hours"
-//               value={stats.hours}
-//               icon={<Clock size={20} />}
-//             />
-//             <StatCard
-//               title="Notifications"
-//               value={stats.notifications}
-//               icon={<Bell size={20} />}
-//             />
-//           </div>
-
-//           {/* ACTIVITY FEED */}
-//           <div className="bg-white rounded-[32px] p-8 border border-slate-100 shadow-sm">
-//             <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-6">
-//               Today’s Progress
-//             </h2>
-
-//             <ul className="space-y-5">
-//               <ActivityItem text="Completed task: Update client report" time="10:45 AM" type="Complete" />
-//               <ActivityItem text="New task assigned: Review project files" time="09:15 AM" type="New" />
-//               <ActivityItem text="Clocked in successfully" time="09:00 AM" type="System" />
-//               <ActivityItem text="Reminder: Team meeting at 4:00 PM" time="Upcoming" type="Event" />
-//             </ul>
-//           </div>
-//         </div>
-//       </main>
-//     </div>
-//   );
-// }
-
-// /* -------- UI COMPONENTS -------- */
-
-// const SidebarLink = ({ icon, label, active }) => (
-//   <div className={`flex items-center gap-4 px-4 py-3 rounded-2xl cursor-pointer transition-all ${
-//     active ? 'bg-white text-indigo-600 shadow-lg' : 'text-indigo-100 hover:bg-white/10'
-//   }`}>
-//     <div className={active ? 'text-indigo-600' : 'text-indigo-200'}>{icon}</div>
-//     <span className="text-[13px] font-bold">{label}</span>
-//   </div>
-// );
-
-// const StatCard = ({ title, value, icon }) => (
-//   <div className="bg-white rounded-[24px] p-6 border border-slate-100 flex items-center justify-between hover:shadow-md transition-shadow">
-//     <div className="flex items-center gap-5">
-//       <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
-//         {icon}
-//       </div>
-//       <div>
-//         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-//           {title}
-//         </p>
-//         <p className="text-2xl font-black text-slate-900 tracking-tight">
-//           {value}
-//         </p>
-//       </div>
-//     </div>
-//   </div>
-// );
-
-// const ActivityItem = ({ text, time, type }) => (
-//   <li className="flex items-center justify-between group">
-//     <div className="flex items-center gap-4">
-//       <div className="w-2 h-2 bg-indigo-500 rounded-full group-hover:scale-150 transition-transform" />
-//       <div>
-//         <p className="text-sm text-slate-600 font-bold leading-none mb-1">{text}</p>
-//         <p className="text-[10px] text-slate-400 font-medium">{time}</p>
-//       </div>
-//     </div>
-//     <span className="text-[9px] font-black uppercase text-indigo-400 border border-indigo-100 px-2 py-1 rounded-md tracking-tighter">
-//       {type}
-//     </span>
-//   </li>
-// );
-
-
 
 
 import { useState } from "react";
 import {
   Search, ClipboardList, Clock, CheckCircle, Bell,
   LayoutDashboard, LogOut, ArrowRight, Calendar,
-  MessageSquare, Settings, Briefcase, Mail, User
+  MessageSquare, Settings, Briefcase, Mail, User, ChevronsLeft, ChevronsRight
 } from "lucide-react";
 
 export default function StaffDashboard() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [staffName] = useState("Lay UX");
   const [stats] = useState({
     tasks: "14",
@@ -207,39 +23,53 @@ export default function StaffDashboard() {
     <div className="h-screen w-full bg-[#EEF2FF] flex font-sans overflow-hidden p-4">
       
       {/* SIDEBAR - Fixed height via h-full */}
-      <aside className="w-64 bg-indigo-600 rounded-[2.5rem] flex flex-col p-8 shrink-0 hidden lg:flex shadow-2xl">
-        <div className="flex items-center gap-2 mb-10">
-          <div className="bg-white p-1.5 rounded-xl">
-            <div className="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black text-xs">P</div>
+      <aside className={`fixed left-0 top-0 h-screen bg-indigo-600 rounded-none flex flex-col p-4 shrink-0 hidden lg:flex shadow-2xl overflow-hidden transition-all duration-300 z-50 ${sidebarOpen ? 'w-64' : 'w-24'}`}>
+        <div className="flex flex-col items-center gap-4 mb-8">
+          <div className="flex items-center justify-center gap-2 w-full">
+            <div className="bg-white p-1.5 rounded-xl">
+              <div className="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black text-xs">P</div>
+            </div>
+            {sidebarOpen && <span className="text-2xl font-black tracking-tight text-white uppercase italic flex-1">Placfy</span>}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 text-white rounded-lg"
+              title={sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
+            >
+              {sidebarOpen ? <ChevronsLeft size={20} /> : <ChevronsRight size={20} />}
+            </button>
           </div>
-          <span className="text-2xl font-black tracking-tight text-white uppercase italic">Placfy</span>
         </div>
 
-        <nav className="space-y-1 flex-1">
-          <SidebarLink icon={<LayoutDashboard size={20}/>} label="Dashboard" active />
-          <SidebarLink icon={<ClipboardList size={20}/>} label="Assignments" />
-          <SidebarLink icon={<Calendar size={20}/>} label="Schedule" />
-          <SidebarLink icon={<Briefcase size={20}/>} label="Projects" />
-          <SidebarLink icon={<MessageSquare size={20}/>} label="Messages" />
+        <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-hide">
+          {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-8">Management</p>}
+          <SidebarLink icon={<LayoutDashboard size={20}/>} label="Dashboard" active={true} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<ClipboardList size={20}/>} label="Assignments" sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Calendar size={20}/>} label="Schedule" sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Briefcase size={20}/>} label="Projects" sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<MessageSquare size={20}/>} label="Messages" sidebarOpen={sidebarOpen} />
         </nav>
 
         <div className="mt-auto pt-6 border-t border-indigo-400/30">
-          <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-4">Current User</p>
-          <div className="flex items-center justify-between px-4 py-3 bg-white/10 rounded-2xl text-white border border-white/10 cursor-pointer hover:bg-white/20 transition-all group">
-             <div className="flex flex-col overflow-hidden">
-               <span className="text-xs font-black truncate">{staffName}</span>
-               <span className="text-[10px] text-indigo-200 font-bold opacity-70">Operations Team</span>
-             </div>
-             <ArrowRight size={16} className="shrink-0 group-hover:translate-x-1 transition-transform" />
-          </div>
-          <button className="flex items-center gap-3 text-indigo-200 mt-6 font-bold text-sm hover:text-white transition-colors ml-4">
-            <LogOut size={18} /> Logout
-          </button>
+          {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-4">Workspace</p>}
+          {sidebarOpen && (
+            <div className="flex items-center justify-between px-4 py-3 bg-white/10 rounded-2xl text-white border border-white/10 cursor-pointer hover:bg-white/20 transition-all group">
+               <div className="flex flex-col overflow-hidden">
+                 <span className="text-xs font-black truncate">{staffName}</span>
+                 <span className="text-[10px] text-indigo-200 font-bold opacity-70">Operations Team</span>
+               </div>
+               <ArrowRight size={16} className="shrink-0 group-hover:translate-x-1 transition-transform" />
+            </div>
+          )}
+          {sidebarOpen && (
+            <button className="flex items-center gap-3 text-indigo-200 mt-6 font-bold text-sm hover:text-white transition-colors ml-4">
+              <LogOut size={18} /> Logout
+            </button>
+          )}
         </div>
       </aside>
 
       {/* MAIN CONTENT AREA - Also fixed height */}
-      <main className="flex-1 flex flex-col h-full overflow-hidden px-8">
+      <main className={`flex-1 flex flex-col h-full overflow-hidden px-8 transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-24'}`}>
         
         {/* HEADER - Sticky at top */}
         <header className="py-6 flex items-center justify-between shrink-0">
@@ -362,13 +192,15 @@ export default function StaffDashboard() {
 
 /* --- COMPONENTS --- */
 
-function SidebarLink({ icon, label, active }) {
+function SidebarLink({ icon, label, active, onClick, sidebarOpen }) {
   return (
-    <div className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all ${
-      active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'
-    }`}>
+    <div 
+      className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all shrink-0 ${sidebarOpen ? '' : 'justify-center px-3'} ${active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'}`} 
+      onClick={onClick} 
+      title={!sidebarOpen ? label : ''}
+    >
       <span className={active ? "text-white" : "text-indigo-300"}>{icon}</span>
-      <span className="text-sm font-bold tracking-tight">{label}</span>
+      {sidebarOpen && <span className="text-sm font-bold tracking-tight">{label}</span>}
     </div>
   );
 }

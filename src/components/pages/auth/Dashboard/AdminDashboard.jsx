@@ -5,10 +5,422 @@ import {
   Search, ShoppingBag, Users, Box, LayoutDashboard,
   BarChart3, Megaphone, LogOut, Bell, ArrowRight,
   Plus, Filter, MoreHorizontal, TrendingUp, Package, CreditCard,
-  UserPlus, Mail, ShieldCheck, Trash2, Edit
+  UserPlus, Mail, ShieldCheck, Trash2, Edit, ChevronsLeft, ChevronsRight, Eye, X
 } from "lucide-react";
 import InvitationModal from "./InvitationModal";
+import AddEmployeeModal from "./AddEmployeeModal";
 
+
+/* --- EMPLOYEE COMPONENT --- */
+const EmployeeView = () => {
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [workspaceSlug, setWorkspaceSlug] = useState(null);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [editingEmployee, setEditingEmployee] = useState(null);
+  const [viewingEmployee, setViewingEmployee] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    fetchWorkspaceAndEmployees();
+  }, []);
+
+  const fetchWorkspaceAndEmployees = async () => {
+    try {
+      setLoading(true);
+      const sessionToken = getSessionToken();
+      const token = sessionToken || getStoredToken();
+      
+      if (!token) {
+        setMessage("✗ Please login first");
+        setMessageType("error");
+        return;
+      }
+
+      // Fetch workspace
+      const workspaceResponse = await fetch(
+        `http://localhost:8000/api/v1/workspaces/`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!workspaceResponse.ok) throw new Error('Failed to fetch workspace');
+
+      const workspaces = await workspaceResponse.json();
+      if (workspaces && workspaces.length > 0) {
+        const workspace = workspaces[0];
+        setWorkspaceSlug(workspace.slug);
+
+        // Fetch employees
+        await fetchEmployees(workspace.slug, token);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setMessage(`✗ ${error.message}`);
+      setMessageType("error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchEmployees = async (slug, token) => {
+    const response = await fetch(
+      `http://localhost:8000/api/v1/workspaces/${slug}/employees/`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      setEmployees(Array.isArray(data) ? data : data.results || []);
+    }
+  };
+
+  const handleAddEmployeeSuccess = (newEmployee) => {
+    setEmployees([newEmployee, ...employees]);
+    setMessage("✓ Employee added successfully!");
+    setMessageType("success");
+    setTimeout(() => setMessage(""), 3000);
+  };
+
+  const handleEditEmployee = (employee) => {
+    setEditingEmployee(employee);
+    setIsAddModalOpen(true);
+  };
+
+  const handleViewEmployee = (employee) => {
+    setViewingEmployee(employee);
+    setIsViewModalOpen(true);
+  };
+
+  const handleDeleteEmployee = async (employee) => {
+    if (deleteConfirm?.id === employee.id) {
+      try {
+        setDeleting(true);
+        const sessionToken = getSessionToken();
+        const token = sessionToken || getStoredToken();
+
+        const response = await fetch(
+          `http://localhost:8000/api/v1/workspaces/${workspaceSlug}/employees/${employee.id}/`,
+          {
+            method: "DELETE",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          setEmployees(employees.filter(emp => emp.id !== employee.id));
+          setDeleteConfirm(null);
+          setMessage("✓ Employee deleted successfully!");
+          setMessageType("success");
+          setTimeout(() => setMessage(""), 3000);
+        } else {
+          setMessage("✗ Failed to delete employee");
+          setMessageType("error");
+          setTimeout(() => setMessage(""), 3000);
+        }
+      } catch (error) {
+        setMessage("✗ Error deleting employee");
+        setMessageType("error");
+        setTimeout(() => setMessage(""), 3000);
+      } finally {
+        setDeleting(false);
+      }
+    } else {
+      setDeleteConfirm(employee);
+    }
+  };
+
+  const handleEditEmployeeSuccess = (updatedEmployee) => {
+    setEmployees(employees.map(emp => emp.id === updatedEmployee.id ? updatedEmployee : emp));
+    setEditingEmployee(null);
+    setMessage("✓ Employee updated successfully!");
+    setMessageType("success");
+    setTimeout(() => setMessage(""), 3000);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 font-bold">Loading employees...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-full animate-in fade-in duration-500">
+      <header className="py-6 shrink-0 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-black text-slate-800 tracking-tight uppercase">Employees</h1>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Manage and monitor your workforce</p>
+        </div>
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="bg-indigo-600 text-white rounded-2xl py-3 px-6 font-black text-xs uppercase tracking-widest hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-200 transition-all active:scale-95 flex items-center gap-2"
+        >
+          <Plus size={18} />
+          Add Employee
+        </button>
+      </header>
+
+      {message && (
+        <div className={`mb-4 p-4 rounded-xl font-bold text-sm animate-in fade-in duration-300 ${
+          messageType === 'success' 
+            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+            : 'bg-red-50 text-red-700 border border-red-200'
+        }`}>
+          {message}
+        </div>
+      )}
+
+      {/* EMPLOYEES TABLE */}
+      <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
+            <Users size={20} />
+          </div>
+          <h2 className="font-black text-slate-800 text-lg">All Employees ({employees.length})</h2>
+        </div>
+
+        {employees.length === 0 ? (
+          <div className="text-center py-12">
+            <Users size={48} className="mx-auto text-slate-300 mb-4" />
+            <p className="text-slate-500 font-bold">No employees found</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-200">
+                  <th className="text-left py-3 px-4 font-black text-slate-700 uppercase tracking-wider">Employee ID</th>
+                  <th className="text-left py-3 px-4 font-black text-slate-700 uppercase tracking-wider">Name</th>
+                  <th className="text-left py-3 px-4 font-black text-slate-700 uppercase tracking-wider">Email</th>
+                  <th className="text-left py-3 px-4 font-black text-slate-700 uppercase tracking-wider">Department</th>
+                  <th className="text-left py-3 px-4 font-black text-slate-700 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {employees.map((employee) => (
+                  <tr key={employee.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                    <td className="py-4 px-4">
+                      <span className="font-bold text-slate-700">{employee.employee_id}</span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-indigo-100 rounded-full overflow-hidden">
+                          <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${employee.work_email}`} alt="" />
+                        </div>
+                        <span className="font-bold text-slate-700">{employee.name}</span>
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 font-medium text-slate-600">{employee.work_email}</td>
+                    <td className="py-4 px-4">
+                      <span className="inline-block bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-xs font-bold uppercase">
+                        {employee.department_display || employee.department}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleViewEmployee(employee)}
+                          className="p-2 hover:bg-blue-50 rounded-lg transition-colors group"
+                          title="View Employee"
+                        >
+                          <Eye size={16} className="text-slate-400 group-hover:text-blue-600" />
+                        </button>
+                        <button
+                          onClick={() => handleEditEmployee(employee)}
+                          className="p-2 hover:bg-indigo-50 rounded-lg transition-colors group"
+                          title="Edit Employee"
+                        >
+                          <Edit size={16} className="text-slate-400 group-hover:text-indigo-600" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteEmployee(employee)}
+                          className="p-2 hover:bg-red-50 rounded-lg transition-colors group"
+                          title="Delete Employee"
+                        >
+                          <Trash2 size={16} className={deleteConfirm?.id === employee.id ? "text-red-600" : "text-slate-400 group-hover:text-red-600"} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <AddEmployeeModal
+        isOpen={isAddModalOpen}
+        onClose={() => {
+          setIsAddModalOpen(false);
+          setEditingEmployee(null);
+        }}
+        workspaceSlug={workspaceSlug}
+        onSuccess={editingEmployee ? handleEditEmployeeSuccess : handleAddEmployeeSuccess}
+        editingEmployee={editingEmployee}
+      />
+
+      {/* View Employee Modal */}
+      {isViewModalOpen && viewingEmployee && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-black text-slate-800">Employee Details</h2>
+              <button
+                onClick={() => setIsViewModalOpen(false)}
+                className="p-2 hover:bg-slate-100 rounded-lg"
+              >
+                <X size={24} className="text-slate-600" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Employee ID</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.employee_id}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Full Name</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.name}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Work Email</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.work_email}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Personal Email</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.personal_email}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Phone</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.phone_number}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Department</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.department_display || viewingEmployee.department}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Gender</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.gender ? (viewingEmployee.gender.charAt(0).toUpperCase() + viewingEmployee.gender.slice(1)) : '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Date of Birth</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.date_of_birth ? new Date(viewingEmployee.date_of_birth).toLocaleDateString() : '-'}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-xs font-bold text-slate-400 uppercase">Address</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.address_line_1 ? viewingEmployee.address_line_1 + (viewingEmployee.address_line_2 ? ', ' + viewingEmployee.address_line_2 : '') : '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Job Title</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.job_title || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Joining Date</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.joining_date ? new Date(viewingEmployee.joining_date).toLocaleDateString() : '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Employment Type</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.employment_type ? viewingEmployee.employment_type.replace('_', ' ').toUpperCase() : '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Employee Level</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.employee_level ? viewingEmployee.employee_level.charAt(0).toUpperCase() + viewingEmployee.employee_level.slice(1) : '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Base Salary</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.base_salary ? viewingEmployee.base_salary.toLocaleString() + ' ' + (viewingEmployee.currency || 'INR') : '-'}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-400 uppercase">Emergency Contact</p>
+                  <p className="font-bold text-slate-800">{viewingEmployee.emergency_contact_name || '-'}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end pt-8 border-t border-slate-200 mt-8">
+              <button
+                onClick={() => setIsViewModalOpen(false)}
+                className="px-6 py-2 rounded-lg font-bold text-sm uppercase text-white bg-indigo-600 hover:bg-indigo-700"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-md">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                <Trash2 size={24} className="text-red-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-black text-slate-800">Delete Employee?</h2>
+                <p className="text-sm text-slate-600">This action cannot be undone</p>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 p-4 rounded-lg mb-6">
+              <p className="text-xs font-bold text-slate-400 uppercase mb-2">Employee to Delete</p>
+              <p className="font-bold text-slate-800">{deleteConfirm.name}</p>
+              <p className="text-sm text-slate-600">{deleteConfirm.work_email}</p>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                disabled={deleting}
+                className="flex-1 px-4 py-2 rounded-lg font-bold text-sm uppercase text-slate-600 hover:bg-slate-100 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteEmployee(deleteConfirm)}
+                disabled={deleting}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-bold text-sm uppercase hover:bg-red-700 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {deleting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={16} />
+                    Delete
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 /* --- MANAGE MEMBER COMPONENT --- */
 const ManageMember = () => {
@@ -351,6 +763,7 @@ const ManageMember = () => {
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [activeView, setActiveView] = useState('dashboard');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [stats] = useState({
     sales: "263k",
     visitors: "35k",
@@ -361,39 +774,52 @@ export default function AdminDashboard() {
     <div className="h-screen w-full bg-[#EEF2FF] flex font-sans overflow-hidden p-4">
       
       {/* SIDEBAR */}
-      <aside className="w-64 bg-indigo-600 rounded-[2.5rem] flex flex-col p-8 shrink-0 hidden lg:flex shadow-2xl overflow-hidden">
-        <div className="flex items-center gap-2 mb-10">
-          <div className="bg-white p-1.5 rounded-xl">
-            <div className="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black text-xs">P</div>
+      <aside className={`fixed left-0 top-0 h-screen bg-indigo-600 rounded-none flex flex-col p-4 shrink-0 hidden lg:flex shadow-2xl overflow-hidden transition-all duration-300 z-50 ${sidebarOpen ? 'w-64' : 'w-24'}`}>
+        <div className="flex flex-col items-center gap-4 mb-8">
+          <div className="flex items-center justify-center gap-2 w-full">
+            <div className="bg-white p-1.5 rounded-xl">
+              <div className="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black text-xs">P</div>
+            </div>
+            {sidebarOpen && <span className="text-2xl font-black tracking-tight text-white uppercase italic flex-1">Placfy</span>}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 text-white rounded-lg"
+              title={sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
+            >
+              {sidebarOpen ? <ChevronsLeft size={20} /> : <ChevronsRight size={20} />}
+            </button>
           </div>
-          <span className="text-2xl font-black tracking-tight text-white uppercase italic">Placfy</span>
         </div>
 
         <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-hide">
-          <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-8">Management</p>
-          <SidebarLink icon={<LayoutDashboard size={20}/>} label="Dashboard" active={activeView === 'dashboard'} onClick={() => setActiveView('dashboard')} />
-          <SidebarLink icon={<Users size={20}/>} label="manage members" active={activeView === 'manage-members'} onClick={() => setActiveView('manage-members')} />
-          <SidebarLink icon={<Box size={20}/>} label="Products" />
-          <SidebarLink icon={<BarChart3 size={20}/>} label="Analytics" />
-          <SidebarLink icon={<Megaphone size={20}/>} label="Marketing" />
+          {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-8">Management</p>}
+          <SidebarLink icon={<LayoutDashboard size={20}/>} label="Dashboard" active={activeView === 'dashboard'} onClick={() => setActiveView('dashboard')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Users size={20}/>} label="manage members" active={activeView === 'manage-members'} onClick={() => setActiveView('manage-members')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Box size={20}/>} label=" Employees " active={activeView === 'employees'} onClick={() => setActiveView('employees')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<BarChart3 size={20}/>} label="Analytics" sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Megaphone size={20}/>} label="Marketing" sidebarOpen={sidebarOpen} />
         </nav>
 
         <div className="mt-auto pt-6 border-t border-indigo-400/30">
-          <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-4">Workspace</p>
-          <div className="flex items-center justify-between px-4 py-3 bg-white/10 rounded-2xl text-white border border-white/10 cursor-pointer hover:bg-white/20 transition-all group">
-             <div className="flex flex-col overflow-hidden">
-               <span className="text-xs font-black truncate">Mytecsys Hub</span>
-               <span className="text-[10px] text-indigo-200 font-bold opacity-70">Enterprise</span>
-             </div>
-             <ArrowRight size={16} className="shrink-0 group-hover:translate-x-1 transition-transform" />
-          </div>
-          <button className="flex items-center gap-3 text-indigo-200 mt-6 font-bold text-sm hover:text-white transition-colors ml-4">
-            <LogOut size={18} /> Logout
-          </button>
+          {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-4">Workspace</p>}
+          {sidebarOpen && (
+            <div className="flex items-center justify-between px-4 py-3 bg-white/10 rounded-2xl text-white border border-white/10 cursor-pointer hover:bg-white/20 transition-all group">
+              <div className="flex flex-col overflow-hidden">
+                <span className="text-xs font-black truncate">Mytecsys Hub</span>
+                <span className="text-[10px] text-indigo-200 font-bold opacity-70">Enterprise</span>
+              </div>
+              <ArrowRight size={16} className="shrink-0 group-hover:translate-x-1 transition-transform" />
+            </div>
+          )}
+          {sidebarOpen && (
+            <button className="flex items-center gap-3 text-indigo-200 mt-6 font-bold text-sm hover:text-white transition-colors ml-4">
+              <LogOut size={18} /> Logout
+            </button>
+          )}
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col h-full overflow-hidden px-8">
+      <main className={`flex-1 flex flex-col h-full overflow-hidden px-8 transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-24'}`}>
         
         {activeView === 'dashboard' ? (
           <>
@@ -457,20 +883,26 @@ export default function AdminDashboard() {
               </div>
             </div>
           </>
-        ) : (
+        ) : activeView === 'manage-members' ? (
           <ManageMember />
-        )}
+        ) : activeView === 'employees' ? (
+          <EmployeeView />
+        ) : null}
       </main>
     </div>
   );
 }
 
 /* --- REUSABLE ATOMS --- */
-function SidebarLink({ icon, label, active, onClick }) {
+function SidebarLink({ icon, label, active, onClick, sidebarOpen }) {
   return (
-    <div className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all shrink-0 ${active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'}`} onClick={onClick}>
+    <div 
+      className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all shrink-0 ${sidebarOpen ? '' : 'justify-center px-3'} ${active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'}`} 
+      onClick={onClick} 
+      title={!sidebarOpen ? label : ''}
+    >
       <span className={active ? "text-white" : "text-indigo-300"}>{icon}</span>
-      <span className="text-sm font-bold tracking-tight">{label}</span>
+      {sidebarOpen && <span className="text-sm font-bold tracking-tight">{label}</span>}
     </div>
   );
 }
