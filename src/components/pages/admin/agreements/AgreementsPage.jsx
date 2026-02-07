@@ -199,12 +199,14 @@ export default function AgreementsPage() {
             <AgreementAnalytics analytics={analytics} />
 
             {/* AGREEMENTS LIST */}
-            <AgreementList
-                agreements={agreements}
-                onView={handleView}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-            />
+            <div className="flex-1 min-h-0 pb-6">
+                <AgreementList
+                    agreements={agreements}
+                    onView={handleView}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                />
+            </div>
 
             {/* VIEW AGREEMENT MODAL */}
             <ViewAgreementModal

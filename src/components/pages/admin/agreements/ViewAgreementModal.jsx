@@ -1,11 +1,11 @@
-import { X } from "lucide-react";
+import { X, FileText, Download } from "lucide-react";
 
 const ViewAgreementModal = ({ isOpen, onClose, agreement }) => {
     if (!isOpen || !agreement) return null;
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-3xl p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-3xl p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto custom-scrollbar">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8">
                     <div>
@@ -54,12 +54,6 @@ const ViewAgreementModal = ({ isOpen, onClose, agreement }) => {
                                     <p className="text-slate-700">{agreement.payment_terms}</p>
                                 </div>
                             )}
-                            {agreement.renewal_terms && (
-                                <div className="bg-slate-50 p-4 rounded-2xl">
-                                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Renewal Terms</p>
-                                    <p className="text-slate-700">{agreement.renewal_terms}</p>
-                                </div>
-                            )}
                             {agreement.description && (
                                 <div className="bg-slate-50 p-4 rounded-2xl">
                                     <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Description</p>
@@ -82,6 +76,31 @@ const ViewAgreementModal = ({ isOpen, onClose, agreement }) => {
                             <InfoField label="Created At" value={new Date(agreement.created_at).toLocaleString()} />
                             <InfoField label="Updated At" value={new Date(agreement.updated_at).toLocaleString()} />
                         </div>
+                    </div>
+                    {/* Files Section */}
+                    <div className="space-y-3">
+                        <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Attached Documents</h3>
+                        {agreement.files && agreement.files.length > 0 ? (
+                            <div className="grid grid-cols-1 gap-2">
+                                {agreement.files.map((file) => (
+                                    <div key={file.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 group hover:border-indigo-200 transition-colors">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                                                <FileText size={20} />
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-slate-700 text-sm">{file.file_name}</p>
+                                                <p className="text-xs text-slate-500">{file.file_type_display || 'Document'} • {(file.file_size / 1024).toFixed(1)} KB</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="bg-slate-50 rounded-xl p-6 text-center border border-dashed border-slate-200">
+                                <p className="text-slate-400 font-medium text-sm">No documents attached</p>
+                            </div>
+                        )}
                     </div>
                 </div>
 

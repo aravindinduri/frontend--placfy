@@ -2,8 +2,8 @@ import { Eye, Edit, Trash2, FileText } from 'lucide-react';
 
 export default function AgreementList({ agreements, onView, onEdit, onDelete }) {
     return (
-        <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100">
-            <div className="flex items-center gap-3 mb-6">
+        <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 h-full flex flex-col">
+            <div className="flex items-center gap-3 mb-6 shrink-0">
                 <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
                     <FileText size={20} />
                 </div>
@@ -11,12 +11,12 @@ export default function AgreementList({ agreements, onView, onEdit, onDelete }) 
             </div>
 
             {agreements.length === 0 ? (
-                <div className="text-center py-12">
+                <div className="text-center py-12 flex-1 flex flex-col items-center justify-center">
                     <FileText size={48} className="mx-auto text-slate-300 mb-4" />
                     <p className="text-slate-500 font-bold">No agreements found</p>
                 </div>
             ) : (
-                <div className="overflow-auto max-h-96">
+                <div className="overflow-auto flex-1 custom-scrollbar">
                     <table className="w-full text-sm">
                         <thead>
                             <tr className="border-b border-slate-200">
