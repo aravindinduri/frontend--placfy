@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import SettingsPage from "../../admin/SettingsPage";
+import SupportPage from "../../admin/Support/SupportPage";
 
 export default function StaffDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -50,6 +51,7 @@ export default function StaffDashboard() {
           <SidebarLink icon={<Calendar size={20} />} label="Schedule" onClick={() => { }} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Briefcase size={20} />} label="Projects" onClick={() => { }} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<MessageSquare size={20} />} label="Messages" onClick={() => { }} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<MessageSquare size={20} />} label="Support" active={activeView === 'support'} onClick={() => setActiveView('support')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Settings size={20} />} label="Settings" active={activeView === 'settings'} onClick={() => setActiveView('settings')} sidebarOpen={sidebarOpen} />
         </nav>
 
@@ -189,6 +191,10 @@ export default function StaffDashboard() {
                 </button>
               </div>
             </div>
+          </div>
+        ) : activeView === 'support' ? (
+          <div className="flex-1 pb-6 overflow-hidden flex flex-col">
+            <SupportPage />
           </div>
         ) : activeView === 'settings' ? (
           <div className="flex-1 pb-6 overflow-hidden flex flex-col">
