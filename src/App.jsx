@@ -8,12 +8,12 @@ import NotFound from './components/ui/NotFound.jsx'
 import AuthPage from './components/pages/auth/AuthPage.jsx'
 import Workspace from './components/pages/auth/Workspace.jsx'
 import AcceptInvitation from './components/pages/auth/Dashboard/AcceptInvitation.jsx';
-
-
+import AdminLayout from './components/pages/admin/Layout.jsx'
 const Home = lazy(() => import('./components/pages/home/Home.jsx'))
 const Contact = lazy(() => import('./components/pages/home/Contact.jsx'))
 const About = lazy(() => import('./components/pages/home/About.jsx'))
 const AdminDashboard = lazy(() => import('./components/pages/auth/Dashboard/AdminDashboard.jsx'))
+const AdminTaskRouter = lazy(() => import('./components/pages/admin/TaskDashboard.jsx'));
 const HRRecruiterDashboard = lazy(() => import('./components/pages/auth/Dashboard/HR_RECRUITER.jsx'))
 const HrDashboard = lazy(() => import('./components/pages/auth/Dashboard/HrDashboard.jsx'))
 const MemberDashboard = lazy(() => import('./components/pages/auth/Dashboard/MEMBER.jsx'))
@@ -38,7 +38,7 @@ function AppRoutes() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/about" element={<About /> } />
+            <Route path="/about" element={<About />} />
             <Route path="/login" element={<AuthPage />} />
             <Route path="/signup" element={<AuthPage />} />
             <Route path="/auth/workspace" element={<Workspace />} />
@@ -54,8 +54,18 @@ function AppRoutes() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/faq" element={<FAQ />} />
+            <Route
+              path="/auth/admin/*"
+              element={
+                <ProtectedRoute roles={["admin"]}>
+                  <AdminLayout /> {/* This layout should contain a router/outlet */}
+                </ProtectedRoute>
+              }
+            >
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="tasks/*" element={<AdminTaskRouter />} /> 
+            </Route>
 
-            {/* Employee Portal */}
             <Route
               path="/employee/*"
               element={
@@ -64,7 +74,6 @@ function AppRoutes() {
                 </ProtectedRoute>
               }
             />
-            {/* Not Found Catch-all */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
