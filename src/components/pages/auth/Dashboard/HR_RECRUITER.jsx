@@ -76,17 +76,14 @@ export default function HRRecruiterDashboard() {
               <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
               <input type="text" placeholder="Search..." className="bg-transparent py-2.5 pl-12 pr-4 text-sm outline-none w-48 focus:w-60 transition-all" />
             </div>
-            
-            <div className="flex items-center gap-3 px-4 border-l border-slate-200/60">
-              <button className="p-2 text-slate-500 hover:bg-indigo-50 rounded-full transition-colors relative">
-                <Bell size={20} />
-                <span className="absolute top-2 right-2 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white"></span>
-              </button>
-              <div className="flex items-center gap-3 ml-2 pl-4 border-l border-slate-200/60">
-                <div className="w-10 h-10 bg-indigo-100 rounded-2xl border-2 border-white shadow-md overflow-hidden ring-4 ring-indigo-50">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=HR" alt="user" />
-                </div>
-              </div>
+
+            <Bell size={20} className="text-slate-500" />
+
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-[#5a4fff]" />
+              <span className="text-sm font-medium text-slate-700">
+                HR
+              </span>
             </div>
           </div>
         </header>
@@ -95,16 +92,28 @@ export default function HRRecruiterDashboard() {
         <div className="flex-1 flex gap-8 min-h-0 pb-6 overflow-hidden">
           <div className="flex-1 flex flex-col gap-6 min-w-0 overflow-y-auto pr-2">
           
-            {/* GREETING */}
-            <div className="bg-indigo-600 rounded-3xl p-8 text-white flex justify-between items-center shrink-0">
-              <div>
-                <h2 className="text-2xl font-bold">
-                  Hello HR 👋
-                </h2>
-                <p className="text-white/80 mt-1 text-sm">
-                  You have 9 new applications today
-                </p>
-              </div>
+          {/* GREETING */}
+          <div className="bg-[#5a4fff] rounded-2xl p-6 text-white flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-bold">
+                Hello HR 👋
+              </h2>
+              <p className="text-white/80 mt-1 text-sm">
+                You have 9 new applications today
+              </p>
+            </div>
+
+            <button className="bg-white text-[#5a4fff] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-100">
+              View Applications
+            </button>
+          </div>
+
+          {/* STATS */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Stat title="Total Candidates" value="1,245" />
+            <Stat title="Open Positions" value="42" />
+            <Stat title="Interviews Today" value="18" />
+          </div>
 
               <button className="bg-white text-indigo-600 px-6 py-2 rounded-lg text-sm font-bold hover:bg-slate-100 transition-colors">
                 View Applications
