@@ -5,8 +5,9 @@ import {
   Search, ShoppingBag, Users, Box, LayoutDashboard,
   BarChart3, Megaphone, LogOut, Bell, ArrowRight,
   Plus, Filter, MoreHorizontal, TrendingUp, Package, CreditCard,
-  UserPlus, Mail, ShieldCheck, Trash2, Edit, ChevronsLeft, ChevronsRight, Eye, X
+  UserPlus, Mail, ShieldCheck, Trash2, Edit, ChevronsLeft, ChevronsRight, Eye, X, FileText
 } from "lucide-react";
+import AgreementsPage from "../../admin/agreements/AgreementsPage";
 import InvitationModal from "./InvitationModal";
 import AddEmployeeModal from "./AddEmployeeModal";
 
@@ -34,7 +35,7 @@ const EmployeeView = () => {
       setLoading(true);
       const sessionToken = getSessionToken();
       const token = sessionToken || getStoredToken();
-      
+
       if (!token) {
         setMessage("✗ Please login first");
         setMessageType("error");
@@ -179,11 +180,10 @@ const EmployeeView = () => {
       </header>
 
       {message && (
-        <div className={`mb-4 p-4 rounded-xl font-bold text-sm animate-in fade-in duration-300 ${
-          messageType === 'success' 
-            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+        <div className={`mb-4 p-4 rounded-xl font-bold text-sm animate-in fade-in duration-300 ${messageType === 'success'
+            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
             : 'bg-red-50 text-red-700 border border-red-200'
-        }`}>
+          }`}>
           {message}
         </div>
       )}
@@ -442,7 +442,7 @@ const ManageMember = () => {
       setLoading(true);
       const sessionToken = getSessionToken();
       const token = sessionToken || getStoredToken();
-      
+
       if (!token) {
         setMessage("✗ Please login first");
         setMessageType("error");
@@ -468,7 +468,7 @@ const ManageMember = () => {
 
         // Fetch members
         await fetchMembers(workspace.slug, token);
-        
+
         // Fetch invitations
         await fetchInvitations(workspace.slug, token);
       }
@@ -608,11 +608,10 @@ const ManageMember = () => {
       </header>
 
       {message && (
-        <div className={`mb-4 p-4 rounded-xl font-bold text-sm animate-in fade-in duration-300 ${
-          messageType === 'success' 
-            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+        <div className={`mb-4 p-4 rounded-xl font-bold text-sm animate-in fade-in duration-300 ${messageType === 'success'
+            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
             : 'bg-red-50 text-red-700 border border-red-200'
-        }`}>
+          }`}>
           {message}
         </div>
       )}
@@ -772,7 +771,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="h-screen w-full bg-[#EEF2FF] flex font-sans overflow-hidden p-4">
-      
+
       {/* SIDEBAR */}
       <aside className={`fixed left-0 top-0 h-screen bg-indigo-600 rounded-none flex flex-col p-4 shrink-0 hidden lg:flex shadow-2xl overflow-hidden transition-all duration-300 z-50 ${sidebarOpen ? 'w-64' : 'w-24'}`}>
         <div className="flex flex-col items-center gap-4 mb-8">
@@ -793,11 +792,12 @@ export default function AdminDashboard() {
 
         <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-hide">
           {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-8">Management</p>}
-          <SidebarLink icon={<LayoutDashboard size={20}/>} label="Dashboard" active={activeView === 'dashboard'} onClick={() => setActiveView('dashboard')} sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<Users size={20}/>} label="manage members" active={activeView === 'manage-members'} onClick={() => setActiveView('manage-members')} sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<Box size={20}/>} label=" Employees " active={activeView === 'employees'} onClick={() => setActiveView('employees')} sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<BarChart3 size={20}/>} label="Analytics" sidebarOpen={sidebarOpen} />
-          <SidebarLink icon={<Megaphone size={20}/>} label="Marketing" sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<LayoutDashboard size={20} />} label="Dashboard" active={activeView === 'dashboard'} onClick={() => setActiveView('dashboard')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Users size={20} />} label="manage members" active={activeView === 'manage-members'} onClick={() => setActiveView('manage-members')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Box size={20} />} label=" Employees " active={activeView === 'employees'} onClick={() => setActiveView('employees')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<FileText size={20} />} label="Agreements" active={activeView === 'agreements'} onClick={() => setActiveView('agreements')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<BarChart3 size={20} />} label="Analytics" sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Megaphone size={20} />} label="Marketing" sidebarOpen={sidebarOpen} />
         </nav>
 
         <div className="mt-auto pt-6 border-t border-indigo-400/30">
@@ -820,19 +820,19 @@ export default function AdminDashboard() {
       </aside>
 
       <main className={`flex-1 flex flex-col h-full overflow-hidden px-8 transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-24'}`}>
-        
+
         {activeView === 'dashboard' ? (
           <>
             {/* HEADER */}
             <header className="py-6 flex items-center justify-between shrink-0">
               <h1 className="text-2xl font-black text-slate-800 tracking-tight uppercase">Admin Dashboard</h1>
-              
+
               <div className="flex items-center gap-6 bg-white/60 p-1.5 rounded-[2rem] border border-white/80 shadow-sm backdrop-blur-md">
                 <div className="relative group hidden md:block">
                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input type="text" placeholder="Search orders..." className="bg-transparent py-2.5 pl-12 pr-4 text-sm outline-none w-48 focus:w-60 transition-all" />
                 </div>
-                
+
                 <div className="flex items-center gap-3 px-4 border-l border-slate-200/60">
                   <button className="p-2 text-slate-500 hover:bg-indigo-50 rounded-full transition-colors relative">
                     <Bell size={20} />
@@ -840,7 +840,7 @@ export default function AdminDashboard() {
                   </button>
                   <div className="flex items-center gap-3 ml-2 pl-4 border-l border-slate-200/60">
                     <div className="w-10 h-10 bg-indigo-100 rounded-2xl border-2 border-white shadow-md overflow-hidden ring-4 ring-indigo-50">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="user" />
+                      <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="user" />
                     </div>
                   </div>
                 </div>
@@ -851,17 +851,17 @@ export default function AdminDashboard() {
             <div className="flex-1 flex gap-8 min-h-0 pb-6 overflow-hidden">
               <div className="flex-[3] flex flex-col gap-6 min-w-0 overflow-y-auto pr-2 scrollbar-hide">
                 <div className="grid grid-cols-3 gap-4 shrink-0">
-                  <StatCard title="Total Sales" value={`$${stats.sales}`} change="+15.4%" icon={<CreditCard className="text-indigo-600" size={20}/>}/>
-                  <StatCard title="Total Visitors" value={stats.visitors} change="+2.1k" icon={<Users className="text-indigo-600" size={20}/>}/>
-                  <StatCard title="Total Orders" value={stats.orders} change="12 Pending" icon={<Package className="text-indigo-600" size={20}/>}/>
+                  <StatCard title="Total Sales" value={`$${stats.sales}`} change="+15.4%" icon={<CreditCard className="text-indigo-600" size={20} />} />
+                  <StatCard title="Total Visitors" value={stats.visitors} change="+2.1k" icon={<Users className="text-indigo-600" size={20} />} />
+                  <StatCard title="Total Orders" value={stats.orders} change="12 Pending" icon={<Package className="text-indigo-600" size={20} />} />
                 </div>
 
                 <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 flex-1 min-h-0 flex flex-col">
                   <div className="flex items-center justify-between mb-8 shrink-0">
                     <h3 className="font-black text-slate-800 text-lg">Live Transactions</h3>
                     <div className="flex gap-2">
-                        <button className="p-2 bg-slate-50 text-slate-400 rounded-xl hover:text-indigo-600 transition-colors"><Filter size={18} /></button>
-                        <button className="p-2 bg-slate-50 text-slate-400 rounded-xl hover:text-indigo-600 transition-colors"><MoreHorizontal size={18} /></button>
+                      <button className="p-2 bg-slate-50 text-slate-400 rounded-xl hover:text-indigo-600 transition-colors"><Filter size={18} /></button>
+                      <button className="p-2 bg-slate-50 text-slate-400 rounded-xl hover:text-indigo-600 transition-colors"><MoreHorizontal size={18} /></button>
                     </div>
                   </div>
                   <div className="space-y-6 overflow-y-auto scrollbar-hide pr-2">
@@ -873,13 +873,13 @@ export default function AdminDashboard() {
               </div>
 
               <div className="w-[340px] flex flex-col gap-6 shrink-0 overflow-hidden">
-                 <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100 shrink-0">
-                    <h4 className="font-black text-slate-800 text-sm mb-6">Inventory Health</h4>
-                    <div className="space-y-5">
-                        <ProgressStep label="In Stock" count="1,420" percent={90} color="bg-indigo-500" />
-                        <ProgressStep label="Low Stock" count="18" percent={15} color="bg-orange-500" />
-                    </div>
-                 </div>
+                <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100 shrink-0">
+                  <h4 className="font-black text-slate-800 text-sm mb-6">Inventory Health</h4>
+                  <div className="space-y-5">
+                    <ProgressStep label="In Stock" count="1,420" percent={90} color="bg-indigo-500" />
+                    <ProgressStep label="Low Stock" count="18" percent={15} color="bg-orange-500" />
+                  </div>
+                </div>
               </div>
             </div>
           </>
@@ -887,6 +887,8 @@ export default function AdminDashboard() {
           <ManageMember />
         ) : activeView === 'employees' ? (
           <EmployeeView />
+        ) : activeView === 'agreements' ? (
+          <AgreementsPage />
         ) : null}
       </main>
     </div>
@@ -896,9 +898,9 @@ export default function AdminDashboard() {
 /* --- REUSABLE ATOMS --- */
 function SidebarLink({ icon, label, active, onClick, sidebarOpen }) {
   return (
-    <div 
-      className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all shrink-0 ${sidebarOpen ? '' : 'justify-center px-3'} ${active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'}`} 
-      onClick={onClick} 
+    <div
+      className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl cursor-pointer transition-all shrink-0 ${sidebarOpen ? '' : 'justify-center px-3'} ${active ? 'bg-white/15 text-white shadow-inner' : 'text-indigo-200 hover:bg-white/5'}`}
+      onClick={onClick}
       title={!sidebarOpen ? label : ''}
     >
       <span className={active ? "text-white" : "text-indigo-300"}>{icon}</span>
@@ -940,13 +942,13 @@ function ActivityItem({ text, time, status, color }) {
 function ProgressStep({ label, count, percent, color }) {
   return (
     <div className="space-y-1">
-        <div className="flex justify-between text-[10px] font-black uppercase">
-            <span className="text-slate-400">{label}</span>
-            <span className="text-slate-800">{count}</span>
-        </div>
-        <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-            <div className={`h-full ${color}`} style={{width: `${percent}%`}} />
-        </div>
+      <div className="flex justify-between text-[10px] font-black uppercase">
+        <span className="text-slate-400">{label}</span>
+        <span className="text-slate-800">{count}</span>
+      </div>
+      <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+        <div className={`h-full ${color}`} style={{ width: `${percent}%` }} />
+      </div>
     </div>
   );
 }
