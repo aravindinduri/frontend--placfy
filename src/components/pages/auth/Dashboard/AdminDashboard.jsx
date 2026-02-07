@@ -5,9 +5,10 @@ import {
   Search, ShoppingBag, Users, Box, LayoutDashboard,
   BarChart3, Megaphone, LogOut, Bell, ArrowRight,
   Plus, Filter, MoreHorizontal, TrendingUp, Package, CreditCard,
-  UserPlus, Mail, ShieldCheck, Trash2, Edit, ChevronsLeft, ChevronsRight, Eye, X, FileText
+  UserPlus, Mail, ShieldCheck, Trash2, Edit, ChevronsLeft, ChevronsRight, Eye, X, FileText, Settings
 } from "lucide-react";
 import AgreementsPage from "../../admin/agreements/AgreementsPage";
+import SettingsPage from "../../admin/SettingsPage";
 import InvitationModal from "./InvitationModal";
 import AddEmployeeModal from "./AddEmployeeModal";
 
@@ -181,8 +182,8 @@ const EmployeeView = () => {
 
       {message && (
         <div className={`mb-4 p-4 rounded-xl font-bold text-sm animate-in fade-in duration-300 ${messageType === 'success'
-            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-            : 'bg-red-50 text-red-700 border border-red-200'
+          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+          : 'bg-red-50 text-red-700 border border-red-200'
           }`}>
           {message}
         </div>
@@ -609,8 +610,8 @@ const ManageMember = () => {
 
       {message && (
         <div className={`mb-4 p-4 rounded-xl font-bold text-sm animate-in fade-in duration-300 ${messageType === 'success'
-            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-            : 'bg-red-50 text-red-700 border border-red-200'
+          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+          : 'bg-red-50 text-red-700 border border-red-200'
           }`}>
           {message}
         </div>
@@ -796,6 +797,7 @@ export default function AdminDashboard() {
           <SidebarLink icon={<Users size={20} />} label="manage members" active={activeView === 'manage-members'} onClick={() => setActiveView('manage-members')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Box size={20} />} label=" Employees " active={activeView === 'employees'} onClick={() => setActiveView('employees')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<FileText size={20} />} label="Agreements" active={activeView === 'agreements'} onClick={() => setActiveView('agreements')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Settings size={20} />} label="Settings" active={activeView === 'settings'} onClick={() => setActiveView('settings')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<BarChart3 size={20} />} label="Analytics" sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Megaphone size={20} />} label="Marketing" sidebarOpen={sidebarOpen} />
         </nav>
@@ -889,6 +891,8 @@ export default function AdminDashboard() {
           <EmployeeView />
         ) : activeView === 'agreements' ? (
           <AgreementsPage />
+        ) : activeView === 'settings' ? (
+          <SettingsPage />
         ) : null}
       </main>
     </div>
