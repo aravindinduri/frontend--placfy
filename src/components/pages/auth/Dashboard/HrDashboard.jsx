@@ -12,9 +12,11 @@ import {
   LogOut,
   ArrowRight,
   Box,
+  MessageSquare,
 } from "lucide-react";
 
 import SettingsPage from "../../admin/SettingsPage";
+import SupportPage from "../../admin/Support/SupportPage";
 
 export default function HrDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -48,6 +50,7 @@ export default function HrDashboard() {
           <SidebarLink icon={<Box size={20} />} label="Tasks" onClick={() => { }} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Briefcase size={20} />} label="Jobs" onClick={() => { }} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Calendar size={20} />} label="Calendar" onClick={() => { }} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<MessageSquare size={20} />} label="Support" active={activeView === 'support'} onClick={() => setActiveView('support')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Settings size={20} />} label="Settings" active={activeView === 'settings'} onClick={() => setActiveView('settings')} sidebarOpen={sidebarOpen} />
         </nav>
 
@@ -174,6 +177,10 @@ export default function HrDashboard() {
                 </div>
 
               </div>
+            </div>
+          ) : activeView === 'support' ? (
+            <div className="flex-1 pb-6 overflow-hidden flex flex-col">
+              <SupportPage />
             </div>
           ) : activeView === 'settings' ? (
             <SettingsPage />

@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { getStoredToken, getSessionToken } from "../../../utils/authToken";
 import TicketDetail from './TicketDetail';
+import CreateTicketModal from './CreateTicketModal';
 
 const SupportPage = () => {
     const [tickets, setTickets] = useState([]);
@@ -13,6 +14,7 @@ const SupportPage = () => {
     const [selectedTicketId, setSelectedTicketId] = useState(null);
     const [workspaceSlug, setWorkspaceSlug] = useState(null);
     const [filterStatus, setFilterStatus] = useState('all');
+    const [showCreateModal, setShowCreateModal] = useState(false);
 
     useEffect(() => {
         fetchWorkspaceAndTickets();
@@ -70,6 +72,13 @@ const SupportPage = () => {
         setActiveView('detail');
     };
 
+    const handleTicketCreated = (newTicket) => {
+        // Refresh tickets
+        const sessionToken = getSessionToken();
+        const token = sessionToken || getStoredToken();
+        if (workspaceSlug) fetchTickets(workspaceSlug, token);
+    };
+
     if (activeView === 'detail' && selectedTicketId) {
         return (
             <TicketDetail
@@ -89,6 +98,13 @@ const SupportPage = () => {
 
     return (
         <div className="flex flex-col h-full animate-in fade-in duration-500">
+            <CreateTicketModal
+                isOpen={showCreateModal}
+                onClose={() => setShowCreateModal(false)}
+                onTicketCreated={handleTicketCreated}
+                workspaceSlug={workspaceSlug}
+            />
+
             {/* HEADER */}
             <header className="py-6 shrink-0 flex items-center justify-between px-6">
                 <div>
@@ -104,7 +120,10 @@ const SupportPage = () => {
                             className="pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-100 w-64"
                         />
                     </div>
-                    <button className="bg-indigo-600 text-white p-2 rounded-xl hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200">
+                    <button
+                        onClick={() => setShowCreateModal(true)}
+                        className="bg-indigo-600 text-white p-2 rounded-xl hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200"
+                    >
                         <Plus size={20} />
                     </button>
                 </div>
