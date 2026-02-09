@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar2 from "../../../layout/Navbar2";
 import {
   LayoutDashboard,
   Users,
@@ -24,16 +25,35 @@ export default function HrDashboard() {
   const [activeView, setActiveView] = useState('dashboard');
 
   return (
-    <div className="h-screen w-full bg-[#EEF2FF] flex font-sans overflow-hidden p-4">
+    <div className="h-screen w-full bg-[#EEF2FF] flex flex-col font-sans overflow-hidden">
+      <style>{`
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: rgba(129, 98, 255, 0.5);
+          border-radius: 10px;
+          transition: background 0.3s ease;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: rgba(129, 98, 255, 0.8);
+        }
+      `}</style>
+      {/* HEADER */}
+      <Navbar2 />
 
+      <div className="flex-1 flex overflow-hidden">
       {/* SIDEBAR */}
-      <aside className={`fixed left-0 top-0 h-screen bg-indigo-600 rounded-none flex flex-col p-4 shrink-0 hidden lg:flex shadow-2xl overflow-hidden transition-all duration-300 z-50 ${sidebarOpen ? 'w-64' : 'w-24'}`}>
+      <aside className={`bg-indigo-600 rounded-none flex flex-col p-4 shrink-0 hidden lg:flex shadow-2xl overflow-hidden transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-24'}`}>
         <div className="flex flex-col items-center gap-4 mb-8">
           <div className="flex items-center justify-center gap-2 w-full">
             <div className="bg-white p-1.5 rounded-xl">
               <div className="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black text-xs">P</div>
             </div>
-            {sidebarOpen && <span className="text-2xl font-black tracking-tight text-white uppercase italic flex-1">Placfy</span>}
+            {sidebarOpen && <span className="text-2xl font-black tracking-tight text-white uppercase  flex-1">Placfy</span>}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="p-2 text-white rounded-lg"
@@ -44,7 +64,7 @@ export default function HrDashboard() {
           </div>
         </div>
 
-        <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-hide">
+        <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-400 scrollbar-track-transparent hover:scrollbar-thumb-indigo-300">
           {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-8">Management</p>}
           <SidebarLink icon={<LayoutDashboard size={20} />} label="Dashboard" active={activeView === 'dashboard'} onClick={() => setActiveView('dashboard')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Users size={20} />} label="Team Members" onClick={() => { }} sidebarOpen={sidebarOpen} />
@@ -74,34 +94,10 @@ export default function HrDashboard() {
         </div>
       </aside>
 
-      <div className={`flex-1 flex flex-col h-full overflow-hidden transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-24'}`}>
+      <div className="flex-1 flex flex-col h-full overflow-hidden transition-all duration-300">
 
-        {/* TOP BAR */}
-        <header className="py-6 flex items-center justify-between shrink-0">
-          <h1 className="text-2xl font-black text-slate-800 tracking-tight uppercase">HR Dashboard</h1>
-
-          <div className="flex items-center gap-6 bg-white/60 p-1.5 rounded-[2rem] border border-white/80 shadow-sm backdrop-blur-md">
-            <div className="relative group hidden md:block">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input type="text" placeholder="Search..." className="bg-transparent py-2.5 pl-12 pr-4 text-sm outline-none w-48 focus:w-60 transition-all" />
-            </div>
-
-            <div className="flex items-center gap-3 px-4 border-l border-slate-200/60">
-              <button className="p-2 text-slate-500 hover:bg-indigo-50 rounded-full transition-colors relative">
-                <Bell size={20} />
-                <span className="absolute top-2 right-2 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white"></span>
-              </button>
-              <div className="flex items-center gap-3 ml-2 pl-4 border-l border-slate-200/60">
-                <div className="w-10 h-10 bg-indigo-100 rounded-2xl border-2 border-white shadow-md overflow-hidden ring-4 ring-indigo-50">
-                  <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=HR" alt="user" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* CONTENT */}
-        <main className="flex-1 flex flex-col min-h-0 overflow-hidden px-8 pb-6">
+        {/* MAIN CONTENT */}
+        <main className="flex-1 flex flex-col h-full overflow-hidden px-8 py-6">
 
           {activeView === 'dashboard' ? (
             <div className="flex-1 overflow-y-auto scrollbar-hide">
@@ -191,6 +187,7 @@ export default function HrDashboard() {
             <SettingsPage />
           ) : null}
         </main>
+      </div>
       </div>
     </div>
   );

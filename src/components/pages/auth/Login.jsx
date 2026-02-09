@@ -54,9 +54,44 @@ export default function Login({ onSignupClick }) {
       }
       
       toast.success('Login successful!')
-      setTimeout(() => {
-        navigate('/auth/workspace')
-      }, 1000)
+      
+      // Check if user has existing workspaces
+      try {
+        const workspacesResponse = await fetch('/api/v1/workspaces/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${tokens.access}`,
+          },
+        })
+
+        if (workspacesResponse.ok) {
+          const workspacesData = await workspacesResponse.json()
+          const workspaces = Array.isArray(workspacesData) ? workspacesData : []
+          
+          console.log('Workspaces found:', workspaces.length)
+          
+          // If user has workspaces, redirect to workspace dashboard
+          // Otherwise, redirect to create workspace page
+          const redirectPath = workspaces.length > 0 ? '/auth/workspace-dashboard' : '/auth/workspace'
+          
+          setTimeout(() => {
+            navigate(redirectPath)
+          }, 1000)
+        } else {
+          // If unable to fetch workspaces, default to workspace page
+          console.log('Unable to fetch workspaces, redirecting to workspace creation')
+          setTimeout(() => {
+            navigate('/auth/workspace')
+          }, 1000)
+        }
+      } catch (workspaceError) {
+        console.error('Error checking workspaces:', workspaceError)
+        // Default to workspace page if error occurs
+        setTimeout(() => {
+          navigate('/auth/workspace')
+        }, 1000)
+      }
     } catch (error) {
       console.error('Login error details:', error)
       toast.error(error.message || 'Login failed')
