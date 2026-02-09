@@ -125,119 +125,141 @@ function Home() {
     navigate(`${target}?role=${role}`)
   }
   
-  if (isLoading || !content) {
-    return <div>Loading...</div>;
-  }
-  
-  const { hero, productSuite, stats, pricingTeaser, testimonials, pricing, faq, beforeAfter } = content.content.home;
+  // Fallback content if API fails
+  const defaultContent = {
+    content: {
+      home: {
+        hero: {
+          friendlyText: "🎯 AI-Powered Hiring",
+          title: "Empower your team to hire smarter and manage better",
+          subtitle: "AI-powered talent acquisition and HR management platform",
+          ctaPrimaryText: "Get Started",
+          ctaSecondaryText: "Book Demo",
+          hrLoginText: "HR Login",
+          recruiterLoginText: "Recruiter Login",
+          heroImage: ""
+        },
+        productSuite: {
+          title: "Our Products",
+          subtitle: "Comprehensive solutions for talent acquisition and HR management",
+          features: [
+            { title: "Applicant Tracking", desc: "Manage candidates efficiently", icon: "FaBriefcase" },
+            { title: "CRM", desc: "Build lasting candidate relationships", icon: "FaHandshake" },
+            { title: "HR Management", desc: "Streamline HR operations", icon: "FaChartLine" },
+            { title: "Recruitment", desc: "Find the best talent", icon: "FaNetworkWired" }
+          ]
+        },
+        stats: {
+          title: "Trusted by industry leaders",
+          stats: [
+            { value: "500+", label: "Companies", suffix: "", icon: "FaUsers" },
+            { value: "50K+", label: "Placements", suffix: "", icon: "FaUserCircle" },
+            { value: "100+", label: "Integrations", suffix: "", icon: "FaPlug" },
+            { value: "99%", label: "Success Rate", suffix: "", icon: "FaTrophy" }
+          ]
+        },
+        pricingTeaser: {
+          title: "Simple, transparent pricing",
+          subtitle: "Choose the plan that fits your needs",
+          buttonText: "View Pricing"
+        },
+        pricing: {
+          plans: []
+        },
+        testimonials: {
+          title: "What our users say",
+          testimonials: []
+        },
+        faq: {
+          title: "Frequently Asked Questions",
+          faqs: []
+        },
+        beforeAfter: {}
+      }
+    }
+  };
+
+  const contentData = content || defaultContent;
+  const { hero, productSuite, stats, pricingTeaser, testimonials, pricing, faq, beforeAfter } = contentData.content.home;
 
 
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-brand/5 via-white to-white">
-        <div className="container-responsive grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-6"
-          >
-            <div className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-white px-3 py-1 text-xs text-brand shadow-sm">
-              <FaCheckCircle /> {hero.friendlyText}
-            </div>
-            <h1 className="text-4xl font-bold tracking-tight text-gradient sm:text-5xl">
-              {hero.title}
-            </h1>
-            <p className="max-w-prose text-slate-600">
-              {hero.subtitle}
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <button onClick={() => setRoleModal('signup')} className="btn-primary">
-                {hero.ctaPrimaryText} <FaArrowRight />
-              </button>
-              <button onClick={() => setShowDemo(true)} className="btn-outline">
-                {hero.ctaSecondaryText}
-              </button>
-            </div>
-            <div className="flex items-center gap-6 pt-2 text-sm text-slate-600">
-              <div className="flex items-center gap-2"><FaUserShield className="text-brand" /> {hero.hrLoginText}</div>
-              <div className="flex items-center gap-2"><FaUserTie className="text-brand" /> {hero.recruiterLoginText}</div>
-            </div>
-          </motion.div>
+      <section className="relative overflow-hidden bg-gradient-to-r from-blue-50 via-indigo-50 to-white">
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl"></div>
+        </div>
+        
+        <div className="grid md:grid-cols-2 md:py-32 py-16 relative z-10 gap-0">
+          <div className="container-responsive flex items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="space-y-6"
+            >
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/80 backdrop-blur px-3 py-1 text-xs text-blue-600 shadow-sm">
+                <FaCheckCircle /> {hero.friendlyText}
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900">
+                {hero.title}
+              </h1>
+              <p className="max-w-prose text-slate-600 text-base">
+                {hero.subtitle}
+              </p>
+              <div className="flex flex-wrap gap-3 pt-4">
+                <motion.button
+                  onClick={() => setRoleModal('signup')}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="btn-primary group flex items-center gap-2 shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  {hero.ctaPrimaryText}
+                  <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                    <FaArrowRight />
+                  </motion.span>
+                </motion.button>
+                <motion.button
+                  onClick={() => setShowDemo(true)}
+                  whileHover={{ scale: 1.05, borderColor: '#5146f2' }}
+                  whileTap={{ scale: 0.98 }}
+                  className="btn-outline transition-all duration-300"
+                >
+                  {hero.ctaSecondaryText}
+                </motion.button>
+              </div>
+              <div className="flex items-center gap-8 pt-6 text-sm text-slate-600">
+                <div className="flex items-center gap-2 hover:text-slate-900 transition-colors"><FaUserShield className="text-blue-600" /> {hero.hrLoginText}</div>
+                <div className="flex items-center gap-2 hover:text-slate-900 transition-colors"><FaUserTie className="text-blue-600" /> {hero.recruiterLoginText}</div>
+              </div>
+            </motion.div>
+          </div>
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative mx-auto w-full max-w-xl"
+            animate={{ opacity: 1, scale: 1, y: [0, -20, 0] }}
+            transition={{ 
+              opacity: { duration: 0.6, delay: 0.1 },
+              y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+            }}
+            className="relative w-full h-full min-h-[500px] flex items-center justify-center pr-4 md:pr-8"
           >
-            <div className="aspect-[4/3] sm:aspect-[4/3] rounded-2xl border border-slate-100 bg-white p-3 sm:p-4 shadow-xl">
-              <div className="relative h-full w-full rounded-xl bg-gradient-to-br from-brand/15 via-accent/10 to-transparent flex flex-col items-center justify-center overflow-hidden">
-                <motion.div
-                initial={{ scale: 0.8, y: 0 }}
-                animate={{
-                  scale: [0.8, 1.1, 0.8],
-                  y: [0, -10, 0]
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="text-[8rem] sm:text-[12rem] md:text-[14rem] lg:text-[16rem] 
-                          sm:translate-y-0 -translate-y-4"
-                style={{ color: '#5146f2' }}
-              >
-                <FaUserTie />
-              </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ 
-                    opacity: [0, 1, 1, 0],
-                    y: [20, 0, 0, 20]
-                  }}
-                  transition={{ 
-                    duration: 6,
-                    repeat: Infinity,
-                    repeatDelay: 0,
-                    times: [0, 0.15, 0.75, 0.85],
-                    ease: "easeInOut"
-                  }}
-                  className="absolute bottom-12 sm:bottom-10 md:bottom-8 text-xl sm:text-2xl font-bold"
-                  style={{ color: '#5146f2' }}
-                >
-                  HR
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ 
-                    opacity: [0, 1, 1, 0],
-                    y: [20, 0, 0, 20]
-                  }}
-                  transition={{ 
-                    duration: 6,
-                    repeat: Infinity,
-                    repeatDelay: 0,
-                    times: [0, 0.15, 0.75, 0.85],
-                    ease: "easeInOut",
-                    delay: 3
-                  }}
-                  className="absolute bottom-12 sm:bottom-10 md:bottom-8 text-xl sm:text-2xl font-bold"
-                  style={{ color: '#5146f2' }}
-                >
-                  Recruiter
-                </motion.div>
-                <div className="absolute bottom-3 sm:bottom-2 text-xs sm:text-sm font-medium text-slate-500">
-                  Friendly
-                </div>
-              </div>
+            <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl border-2 border-slate-200 p-1">
+              <img 
+                src="/landing.jpg" 
+                alt="Placfy Dashboard" 
+                className="w-full h-full object-cover rounded-xl"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent rounded-xl"></div>
             </div>
-            <img src={hero.heroImage} alt="Placfy" className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 h-12 w-12 sm:h-16 sm:w-16 rounded-lg shadow-lg" />
           </motion.div>
         </div>
       </section>
+
+
+
 
       {/* Product suite */}
       <section className="container-responsive py-14 md:py-20">
@@ -255,17 +277,21 @@ function Home() {
           {productSuite.features.map((f, idx) => {
             const Icon = iconMap[f.icon];
             return (
-            <div
+            <motion.div
               key={f.title}
-              className="group rounded-2xl border border-slate-100 bg-white p-6 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-xl"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1, duration: 0.5 }}
+              className="group rounded-2xl border border-slate-100 bg-white p-6 shadow-lg transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:border-brand/30 cursor-pointer"
               style={{ transitionDelay: `${idx * 100}ms` }}
             >
-              <div className="mb-4 inline-block rounded-xl bg-gradient-to-br from-brand/10 to-brand-secondary/10 p-3 transition-all duration-300 group-hover:scale-110">
-                <Icon className="h-6 w-6 text-brand" style={{ color: '#5146f2' }} />
+              <div className="mb-4 inline-block rounded-xl bg-gradient-to-br from-brand/10 to-brand-secondary/10 p-3 transition-all duration-300 group-hover:scale-125 group-hover:from-brand/20 group-hover:to-brand-secondary/20">
+                <Icon className="h-6 w-6 text-brand transition-all duration-300 group-hover:rotate-12" style={{ color: '#5146f2' }} />
               </div>
-              <h3 className="mb-2 text-lg font-semibold text-slate-900">{f.title}</h3>
-              <p className="text-slate-600">{f.desc}</p>
-            </div>
+              <h3 className="mb-2 text-lg font-semibold text-slate-900 transition-colors duration-300 group-hover:text-brand">{f.title}</h3>
+              <p className="text-slate-600 transition-colors duration-300 group-hover:text-slate-700">{f.desc}</p>
+            </motion.div>
           )})}
         </div>
         
@@ -294,6 +320,477 @@ function Home() {
 
       <BeforeAfter {...beforeAfter} />
 
+      {/* Easy-to-use Recruitment Section */}
+      <section className="py-14 md:py-20 bg-white">
+        <div className="container-responsive">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <Reveal>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 transition-colors duration-300">
+                  Easy-to-use Recruitment Software
+                </h2>
+                <p className="text-slate-600 mb-6 transition-colors duration-300">
+                  Placify platform is simple yet powerful, accessible and relevant to all recruiters.
+                </p>
+                <ul className="space-y-4">
+                  {[{title: 'Customizable pipeline', desc: 'Customize your recruitment pipeline based on your process'}, {title: 'Kanban board', desc: 'Get an overview of your recruitment progressions in one single board view'}].map((item, idx) => (
+                    <motion.li
+                      key={idx}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.1 }}
+                      className="flex items-start gap-3 group cursor-pointer p-2 rounded-lg transition-all duration-300 hover:bg-brand/5"
+                    >
+                      <motion.div
+                        className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1 transition-all duration-300 group-hover:bg-brand/20 group-hover:scale-110"
+                        whileHover={{ rotate: 360 }}
+                        transition={{ type: 'spring', stiffness: 200 }}
+                      >
+                        <FaCheckCircle className="text-brand transition-colors duration-300" style={{ color: '#5146f2' }} />
+                      </motion.div>
+                      <div>
+                        <h4 className="font-semibold text-slate-900 transition-colors duration-300 group-hover:text-brand">{item.title}</h4>
+                        <p className="text-sm text-slate-600 transition-colors duration-300 group-hover:text-slate-700">{item.desc}</p>
+                      </div>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <motion.div
+                className="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand/5 to-accent/5 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl hover:border-brand/30 cursor-pointer group"
+                whileHover={{ y: -10 }}
+              >
+                <div className="bg-white rounded-xl overflow-hidden h-64 md:h-80 relative">
+                  <img 
+                    src="/RecruitmentDP.jpg" 
+                    alt="Recruitment Dashboard Preview" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              </motion.div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Job Posting Channels Section */}
+      <section className="py-14 md:py-20 bg-slate-50">
+        <div className="container-responsive">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <Reveal>
+              <div className="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand/5 to-accent/5 p-6 shadow-lg">
+                <div className="bg-white rounded-xl p-4 h-64 md:h-80 flex flex-wrap items-center justify-center gap-4">
+                  <div className="text-2xl">🌐</div>
+                  <div className="text-2xl">📱</div>
+                  <div className="text-2xl">💼</div>
+                  <div className="text-2xl">🔗</div>
+                </div>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                  Post your jobs on 2,500+ Free & Premium Channels
+                </h2>
+                <p className="text-slate-600 mb-6">
+                  Share your job openings on 2,500+ free and premium job boards, social platforms, and integrated natively.
+                </p>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <div className="w-2 h-2 rounded-full bg-brand" style={{ backgroundColor: '#5146f2' }}></div>
+                    2,500+ job boards: Global, local and specialized free platforms
+                  </li>
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <div className="w-2 h-2 rounded-full bg-brand" style={{ backgroundColor: '#5146f2' }}></div>
+                    20+ social media platforms, including LinkedIn, Facebook, Twitter, GitHub, Medium
+                  </li>
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <div className="w-2 h-2 rounded-full bg-brand" style={{ backgroundColor: '#5146f2' }}></div>
+                    Native integration for Job boards built in
+                  </li>
+                </ul>
+                <motion.button
+                  className="btn-primary shadow-lg hover:shadow-xl transition-all duration-300"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Try it For Free
+                </motion.button>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Screening Section */}
+      <section className="py-14 md:py-20 bg-white">
+        <div className="container-responsive">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <Reveal>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                  AI-Powered Screening & Interviews
+                </h2>
+                <p className="text-slate-600 mb-6">
+                  Scale your screening by conducting unlimited candidate interviews with automated screening around the clock.
+                </p>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <div className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1">
+                      <FaCheckCircle className="text-brand" style={{ color: '#5146f2' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900">24/7 Interview Availability</h4>
+                      <p className="text-sm text-slate-600">Launch an intelligent agent to facilitate standardized, automated screening around the clock</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1">
+                      <FaCheckCircle className="text-brand" style={{ color: '#5146f2' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900">Instant Candidate Assessments</h4>
+                      <p className="text-sm text-slate-600">Receive AI-powered evaluations directly in Placify to compare all applicants consistently</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <motion.div
+                className="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand/5 to-accent/5 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl hover:border-brand/30 cursor-pointer group"
+                whileHover={{ y: -10 }}
+              >
+                <div className="bg-white rounded-xl overflow-hidden h-64 md:h-80 relative">
+                  <img 
+                    src="/AIInterview.jpg" 
+                    alt="AI Interview Interface" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              </motion.div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Chat with Data Using AI Section */}
+      <section className="py-14 md:py-20 bg-slate-50">
+        <div className="container-responsive">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <Reveal>
+              <motion.div
+                className="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand/5 to-accent/5 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl hover:border-brand/30 cursor-pointer group"
+                whileHover={{ y: -10 }}
+              >
+                <div className="bg-white rounded-xl overflow-hidden h-64 md:h-80 relative">
+                  <img 
+                    src="/chatdashboard.jpg" 
+                    alt="AI Chat Dashboard" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              </motion.div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                  Chat with Your Data Using AI
+                </h2>
+                <p className="text-slate-600 mb-6">
+                  Connect your Placify account to AI tools like ChatGPT, Claude, and Gemini. Use prompts to find insights, summarize candidates, and write emails using your recruitment data.
+                </p>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <div className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1">
+                      <FaCheckCircle className="text-brand" style={{ color: '#5146f2' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900">Supercharge Your AI</h4>
+                      <p className="text-sm text-slate-600">Securely link Placify to your favorite AI to analyze candidates, write emails using your live data</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1">
+                      <FaCheckCircle className="text-brand" style={{ color: '#5146f2' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900">Get Instant Answers</h4>
+                      <p className="text-sm text-slate-600">Ask specific questions about your talent pool, e.g., "Is John Doe a good fit for our Software Engineer role?" and get instant answers</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Recommendations Section */}
+      <section className="py-14 md:py-20 bg-white">
+        <div className="container-responsive">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <Reveal>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                  AI-Powered Recommendations
+                </h2>
+                <p className="text-slate-600 mb-6">
+                  Placify AI Engine simplifies the entire hiring process by identifying the best candidates for your job while automizing redundant tasks.
+                </p>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <div className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1">
+                      <FaCheckCircle className="text-brand" style={{ color: '#5146f2' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900">Matching recommendations</h4>
+                      <p className="text-sm text-slate-600">Score candidates' profiles based on job requirements to facilitate the screening process</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1">
+                      <FaCheckCircle className="text-brand" style={{ color: '#5146f2' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900">Candidates' profiles enrichment</h4>
+                      <p className="text-sm text-slate-600">Fetch candidate profiles with LinkedIn and other social media platforms for better matching recommendations</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <motion.div
+                className="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand/5 to-accent/5 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl hover:border-brand/30 cursor-pointer group"
+                whileHover={{ y: -10 }}
+              >
+                <div className="bg-white rounded-xl overflow-hidden h-64 md:h-80 relative">
+                  <img 
+                    src="/AIrecomondations.jpg" 
+                    alt="AI Recommendations" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              </motion.div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Candidate Profiles Enrichment Section */}
+      <section className="py-14 md:py-20 bg-slate-50">
+        <div className="container-responsive">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <Reveal>
+              <motion.div
+                className="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand/5 to-accent/5 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl hover:border-brand/30 cursor-pointer group"
+                whileHover={{ y: -10 }}
+              >
+                <div className="bg-white rounded-xl overflow-hidden h-64 md:h-80 relative">
+                  <img 
+                    src="/ProfilesEnrichment.jpg" 
+                    alt="Enriched Candidate Profiles" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              </motion.div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                  Candidates' Profiles Enrichment
+                </h2>
+                <p className="text-slate-600 mb-6">
+                  Collect insights beyond resume. Placify AI Engine browses the web in search of data on 20+ social media and public platforms to automatically enrich candidates' profiles.
+                </p>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <div className="w-2 h-2 rounded-full bg-brand" style={{ backgroundColor: '#5146f2' }}></div>
+                    Data enrichment done seamlessly during the candidate creation
+                  </li>
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <div className="w-2 h-2 rounded-full bg-brand" style={{ backgroundColor: '#5146f2' }}></div>
+                    20+ social and public platforms, including LinkedIn, Facebook, Twitter, GitHub, Medium and many more
+                  </li>
+                </ul>
+                <motion.button
+                  className="btn-primary shadow-lg hover:shadow-xl transition-all duration-300"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Try it For Free
+                </motion.button>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Progressive Mobile Application */}
+      <section className="py-14 md:py-20 bg-white">
+        <div className="container-responsive">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <Reveal>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                  Progressive Mobile Application
+                </h2>
+                <p className="text-slate-600 mb-6">
+                  Access Placify from your computer, phone, or tablet to ensure you never miss any activity, wherever you are.
+                </p>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <div className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1">
+                      <FaCheckCircle className="text-brand" style={{ color: '#5146f2' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900">Recruit on the go</h4>
+                      <p className="text-sm text-slate-600">Access Placify from any device to stay updated on recruitment progress</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1">
+                      <FaCheckCircle className="text-brand" style={{ color: '#5146f2' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900">Push Notifications</h4>
+                      <p className="text-sm text-slate-600">Get notified for reminders, and specific events</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <motion.div
+                className="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand/5 to-accent/5 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl hover:border-brand/30 cursor-pointer group"
+                whileHover={{ y: -10 }}
+              >
+                <div className="bg-white rounded-xl overflow-hidden h-64 md:h-80 relative">
+                  <img 
+                    src="/WebApp2.jpg" 
+                    alt="Mobile Application" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              </motion.div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Branded Career Page */}
+      <section className="py-14 md:py-20 bg-slate-50">
+        <div className="container-responsive">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <Reveal>
+              <motion.div
+                className="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand/5 to-accent/5 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl hover:border-brand/30 cursor-pointer group"
+                whileHover={{ y: -10 }}
+              >
+                <div className="bg-white rounded-xl overflow-hidden h-64 md:h-80 relative">
+                  <img 
+                    src="/CareerPage.jpg" 
+                    alt="Career Page Builder" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              </motion.div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                  Customize or Link your Branded Career Page
+                </h2>
+                <p className="text-slate-600 mb-6">
+                  Build your unique branded career page to attract top talent and proudly communicate who you are to talent. Showcase your company culture and display your unique value proposition.
+                </p>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <div className="w-2 h-2 rounded-full bg-brand" style={{ backgroundColor: '#5146f2' }}></div>
+                    No development required: Connect your custom domain and customize your page with zero-technical resources needed
+                  </li>
+                  <li className="flex items-center gap-2 text-slate-700">
+                    <div className="w-2 h-2 rounded-full bg-brand" style={{ backgroundColor: '#5146f2' }}></div>
+                    Fast setup and compatibility with all web platforms: WordPress, Wix, Squarespace, and others
+                  </li>
+                </ul>
+                <motion.button
+                  className="btn-primary shadow-lg hover:shadow-xl transition-all duration-300"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Try it For Free
+                </motion.button>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Candidate Onboarding Section */}
+      <section className="py-14 md:py-20 bg-white">
+        <div className="container-responsive">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <Reveal>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                  Candidate Onboarding & Placement Management
+                </h2>
+                <p className="text-slate-600 mb-6">
+                  Track and manage every step of the employee experience, from beginning to end. Leverage the full potential of Placify's recruitment software and ATS to place the best candidates.
+                </p>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <div className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1">
+                      <FaCheckCircle className="text-brand" style={{ color: '#5146f2' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900">Onboarding Management</h4>
+                      <p className="text-sm text-slate-600">Streamline the onboarding process with document checklist, secure data sharing, and automated workflows</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="rounded-full bg-brand/10 p-2 flex-shrink-0 mt-1">
+                      <FaCheckCircle className="text-brand" style={{ color: '#5146f2' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900">Placement Tracking</h4>
+                      <p className="text-sm text-slate-600">Full visibility on candidate progression through every stage of the employment experience</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <motion.div
+                className="rounded-2xl border border-slate-100 bg-gradient-to-br from-brand/5 to-accent/5 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl hover:border-brand/30 cursor-pointer group"
+                whileHover={{ y: -10 }}
+              >
+                <div className="bg-white rounded-xl overflow-hidden h-64 md:h-80 flex items-center justify-center relative">
+                  <img 
+                    src="/employee-onboarding.jpg" 
+                    alt="Onboarding Workflow" 
+                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              </motion.div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing teaser */}
       <section className="bg-slate-50 py-14 md:py-20">
         <div className="container-responsive text-center">
@@ -302,9 +799,17 @@ function Home() {
             <p className="mx-auto mb-8 max-w-2xl text-slate-600">{pricingTeaser.subtitle}</p>
           </Reveal>
           <Reveal delay={0.1}>
-            <Link to="/pricing" className="btn-primary inline-flex">
-              {pricingTeaser.buttonText} <FaArrowRight />
-            </Link>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Link to="/pricing" className="btn-primary inline-flex gap-2 shadow-lg hover:shadow-xl transition-all duration-300">
+                {pricingTeaser.buttonText}
+                <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                  <FaArrowRight />
+                </motion.span>
+              </Link>
+            </motion.div>
           </Reveal>
           <div className="mt-10">
             <Reveal>

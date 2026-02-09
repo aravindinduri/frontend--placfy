@@ -70,64 +70,142 @@ export default function Login({ onSignupClick }) {
   }
 
   return (
-    <div className="w-full">
-      <h2 className="text-3xl font-bold mb-2 text-center text-slate-900">Welcome Back</h2>
-      <p className="text-center text-slate-600 mb-6">Login to your account</p>
+    <div className="min-h-screen flex items-center justify-center bg-white">
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">Username</label>
-          <div className="relative">
-            <FiUser className="absolute left-3 top-3 text-slate-400" />
-            <input
-              {...register('username')}
-              type="text"
-              className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="johndoe"
-            />
+      {/* Main Card */}
+      <div className="w-[1100px] h-[600px] bg-white rounded-3xl shadow-2xl flex overflow-hidden border border-slate-200">
+
+        {/* LEFT SIDE - Brand Panel */}
+        <div className="w-1/2 bg-gradient-to-br from-[#5a4fff] via-[#5146f2] to-[#4338e0] rounded-r-[80px] flex flex-col items-center justify-center p-12 relative overflow-hidden">
+          
+          {/* Decorative circles */}
+          {/* <div className="absolute top-10 left-8 w-40 h-40 bg-white bg-opacity-15 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-56 h-56 bg-white bg-opacity-10 rounded-full blur-3xl"></div> */}
+          
+          {/* Logo and text */}
+          <div className="relative z-10 text-center">
+            {/* Logo */}
+            <div className="mb-8">
+              <img src="/Logo3.png" alt="Placfy" className="w-20 h-20 rounded-lg mx-auto shadow-lg" />
+            </div>
+            
+            {/* Brand text */}
+            <h1 className="text-white text-4xl font-bold mb-4">Placfy</h1>
+            
+            {/* Tagline */}
+            <h2 className="text-white text-3xl font-bold leading-snug mb-8">
+              Learn From World's Best Instructors Around The World.
+            </h2>
+            
+            {/* Illustration with emojis */}
+            {/* <div className="flex justify-center gap-8 text-6xl my-8">
+              <span className="hover:scale-125 transition transform duration-300">🚀</span>
+              <span className="hover:scale-125 transition transform duration-300">👨‍💻</span>
+              <span className="hover:scale-125 transition transform duration-300">✉️</span>
+            </div> */}
+            
+            {/* Description */}
+            <p className="text-blue-100 text-sm leading-relaxed max-w-sm">
+              Join thousands of students learning from world-class instructors and transform your skills
+            </p>
           </div>
-          {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username.message}</p>}
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">Password</label>
-          <div className="relative">
-            <FiLock className="absolute left-3 top-3 text-slate-400" />
-            <input
-              {...register('password')}
-              type={showPassword ? 'text' : 'password'}
-              className="w-full pl-10 pr-10 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="••••••"
-            />
+
+        {/* RIGHT SIDE - Form */}
+        <div className="w-1/2 flex flex-col justify-center px-14">
+
+          {/* Language */}
+          <div className="text-right text-sm text-slate-600 mb-8 font-medium">
+            🌐 English (USA)
+          </div>
+
+
+          {/* Title */}
+          <div className="mb-8 text-center">
+            <h2 className="text-4xl font-bold text-slate-900 mb-2">
+              Welcome Back
+            </h2>
+            <p className="text-slate-600 text-sm">Login to your account</p>
+          </div>
+
+
+          {/* Form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+
+            {/* Email/Username */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">Email Address</label>
+              <input
+                {...register('username')}
+                type="text"
+                placeholder="your@email.com"
+                className="w-full border-b border-slate-300 py-3 outline-none focus:border-[#5a4fff] text-slate-900 placeholder-slate-500 text-sm font-medium transition-colors"
+              />
+              {errors.username && <p className="text-red-500 text-xs mt-2">{errors.username?.message}</p>}
+            </div>
+
+
+            {/* Password */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-2 uppercase tracking-wide">Password</label>
+              <div className="relative">
+                <input
+                  {...register('password')}
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••"
+                  className="w-full border-b border-slate-300 py-3 outline-none focus:border-[#5a4fff] text-slate-900 placeholder-slate-500 text-sm font-medium transition-colors pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-0 top-3 text-slate-400 hover:text-[#5a4fff] transition-colors"
+                >
+                  {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                </button>
+              </div>
+              {errors.password && <p className="text-red-500 text-xs mt-2">{errors.password?.message}</p>}
+            </div>
+
+
+            {/* Forgot Password */}
+            <div className="text-right">
+              <a href="/forgot-password" className="text-[#5a4fff] text-xs font-semibold hover:underline">
+                Forgot your password?
+              </a>
+            </div>
+
+
+            {/* Login Button */}
             <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
+              disabled={loading}
+              className="w-full mt-6 py-3 rounded-lg text-white font-bold bg-gradient-to-r from-[#5a4fff] to-[#4338e0] hover:opacity-90 transition-opacity shadow-lg disabled:opacity-50"
             >
-              {showPassword ? <FiEyeOff /> : <FiEye />}
+              {loading ? "Logging in..." : "Login"}
             </button>
+
+          </form>
+
+
+          {/* Sign Up */}
+          <div className="text-center text-sm mt-8 text-slate-600">
+
+            Don't have an account?
+
+            <button
+              onClick={handleSignupClick}
+              className="text-[#5a4fff] ml-2 font-bold hover:underline"
+            >
+              Sign Up
+            </button>
+
           </div>
-          {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 transition"
-        >
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
+      </div>
 
-      <p className="text-center mt-4 text-slate-600">
-        Don't have an account?{' '}
-        <button 
-          onClick={handleSignupClick}
-          className="text-blue-600 hover:underline font-medium"
-        >
-          Sign up
-        </button>
-      </p>
     </div>
+
   )
 }

@@ -28,7 +28,7 @@ const EmployeeLayout = lazy(() => import('./components/pages/employee/EmployeeLa
 
 function AppRoutes() {
   const location = useLocation()
-  const hideGlobalLayout = /^\/(employee|auth\/workspace|auth\/admin-dashboard|auth\/hr-recruiter-dashboard|auth\/hr-dashboard|auth\/member-dashboard|auth\/recruiter-dashboard|auth\/staff-dashboard|auth\/workspace-dashboard)\b/.test(location.pathname)
+  const hideGlobalLayout = /^\/(login|signup|employee|auth\/workspace|auth\/admin-dashboard|auth\/hr-recruiter-dashboard|auth\/hr-dashboard|auth\/member-dashboard|auth\/recruiter-dashboard|auth\/staff-dashboard|auth\/workspace-dashboard)\b/.test(location.pathname)
 
   return (
     <div className="flex min-h-screen flex-col">
