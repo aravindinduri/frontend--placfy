@@ -17,6 +17,7 @@ import {
 
 import SettingsPage from "../../admin/SettingsPage";
 import SupportPage from "../../admin/Support/SupportPage";
+import HrTasksPage from "../../hr/tasks/HrTasksPage";
 
 export default function MemberDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -46,6 +47,7 @@ export default function MemberDashboard() {
           {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-8">Management</p>}
           <SidebarLink icon={<LayoutDashboard size={20} />} label="Dashboard" active={activeView === 'dashboard'} onClick={() => setActiveView('dashboard')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Users size={20} />} label="Candidates" onClick={() => { }} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<Box size={20} />} label="Tasks" active={activeView === 'tasks'} onClick={() => setActiveView('tasks')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Briefcase size={20} />} label="Jobs" onClick={() => { }} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Calendar size={20} />} label="Interviews" onClick={() => { }} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<MessageSquare size={20} />} label="Support" active={activeView === 'support'} onClick={() => setActiveView('support')} sidebarOpen={sidebarOpen} />
@@ -174,6 +176,10 @@ export default function MemberDashboard() {
               </div>
 
             </div>
+          </div>
+        ) : activeView === 'tasks' ? (
+          <div className="flex-1 pb-6 overflow-hidden flex flex-col">
+            <HrTasksPage />
           </div>
         ) : activeView === 'support' ? (
           <div className="flex-1 pb-6 overflow-hidden flex flex-col">

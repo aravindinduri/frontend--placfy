@@ -5,12 +5,13 @@ import {
   Search, ShoppingBag, Users, Box, LayoutDashboard,
   BarChart3, Megaphone, LogOut, Bell, ArrowRight,
   Plus, Filter, MoreHorizontal, TrendingUp, Package, CreditCard,
-  UserPlus, Mail, ShieldCheck, Trash2, Edit, ChevronsLeft, ChevronsRight, Eye, X, FileText, Settings, MessageSquare
+  UserPlus, Mail, ShieldCheck, Trash2, Edit, ChevronsLeft, ChevronsRight, Eye, X, FileText, Settings, MessageSquare, CheckSquare
 } from "lucide-react";
 import AgreementsPage from "../../admin/agreements/AgreementsPage";
 import SettingsPage from "../../admin/SettingsPage";
 import SupportPage from "../../admin/Support/SupportPage";
 import AnalyticsPage from "../../admin/AnalyticsPage";
+import TasksPage from "../../admin/tasks/TasksPage";
 import InvitationModal from "./InvitationModal";
 import AddEmployeeModal from "./AddEmployeeModal";
 
@@ -799,6 +800,7 @@ export default function AdminDashboard() {
           <SidebarLink icon={<Users size={20} />} label="manage members" active={activeView === 'manage-members'} onClick={() => setActiveView('manage-members')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Box size={20} />} label=" Employees " active={activeView === 'employees'} onClick={() => setActiveView('employees')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<FileText size={20} />} label="Agreements" active={activeView === 'agreements'} onClick={() => setActiveView('agreements')} sidebarOpen={sidebarOpen} />
+          <SidebarLink icon={<CheckSquare size={20} />} label="Tasks" active={activeView === 'tasks'} onClick={() => setActiveView('tasks')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<MessageSquare size={20} />} label="Support" active={activeView === 'support'} onClick={() => setActiveView('support')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Settings size={20} />} label="Settings" active={activeView === 'settings'} onClick={() => setActiveView('settings')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<BarChart3 size={20} />} label="Analytics" active={activeView === 'analytics'} onClick={() => setActiveView('analytics')} sidebarOpen={sidebarOpen} />
@@ -901,6 +903,10 @@ export default function AdminDashboard() {
         ) : activeView === 'analytics' ? (
           <div className="flex-1 pb-6 overflow-hidden flex flex-col">
             <AnalyticsPage />
+          </div>
+        ) : activeView === 'tasks' ? (
+          <div className="flex-1 pb-6 overflow-hidden flex flex-col">
+            <TasksPage />
           </div>
         ) : activeView === 'settings' ? (
           <div className="flex-1 pb-6 overflow-hidden flex flex-col">
