@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Navbar2 from "../../../layout/Navbar2";
 import {
   LayoutDashboard,
   Users,
@@ -12,6 +13,7 @@ import {
   LogOut,
   ArrowRight,
   MessageSquare,
+  Box,
 } from "lucide-react";
 
 import SettingsPage from "../../admin/SettingsPage";
@@ -23,16 +25,35 @@ export default function HRRecruiterDashboard() {
   const [activeView, setActiveView] = useState('dashboard');
 
   return (
-    <div className="h-screen w-full bg-[#EEF2FF] flex font-sans overflow-hidden p-4">
+    <div className="h-screen w-full bg-[#EEF2FF] flex flex-col font-sans overflow-hidden">
+      <style>{`
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: rgba(129, 98, 255, 0.5);
+          border-radius: 10px;
+          transition: background 0.3s ease;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: rgba(129, 98, 255, 0.8);
+        }
+      `}</style>
+      {/* HEADER */}
+      <Navbar2 />
 
+      <div className="flex-1 flex overflow-hidden">
       {/* SIDEBAR */}
-      <aside className={`fixed left-0 top-0 h-screen bg-indigo-600 rounded-none flex flex-col p-4 shrink-0 hidden lg:flex shadow-2xl overflow-hidden transition-all duration-300 z-50 ${sidebarOpen ? 'w-64' : 'w-24'}`}>
+      <aside className={`bg-indigo-600 rounded-none flex flex-col p-4 shrink-0 hidden lg:flex shadow-2xl overflow-hidden transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-24'}`}>
         <div className="flex flex-col items-center gap-4 mb-8">
           <div className="flex items-center justify-center gap-2 w-full">
             <div className="bg-white p-1.5 rounded-xl">
               <div className="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black text-xs">P</div>
             </div>
-            {sidebarOpen && <span className="text-2xl font-black tracking-tight text-white uppercase italic flex-1">Placfy</span>}
+            {sidebarOpen && <span className="text-2xl font-black tracking-tight text-white uppercase  flex-1">Placfy</span>}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="p-2 text-white rounded-lg"
@@ -43,7 +64,7 @@ export default function HRRecruiterDashboard() {
           </div>
         </div>
 
-        <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-hide">
+        <nav className="space-y-1 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-400 scrollbar-track-transparent hover:scrollbar-thumb-indigo-300">
           {sidebarOpen && <p className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest mb-4 ml-8">Management</p>}
           <SidebarLink icon={<LayoutDashboard size={20} />} label="Dashboard" active={activeView === 'dashboard'} onClick={() => setActiveView('dashboard')} sidebarOpen={sidebarOpen} />
           <SidebarLink icon={<Users size={20} />} label="Candidates" onClick={() => { }} sidebarOpen={sidebarOpen} />
@@ -73,7 +94,7 @@ export default function HRRecruiterDashboard() {
         </div>
       </aside>
 
-      <main className={`flex-1 flex flex-col h-full overflow-hidden px-8 transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-24'}`}>
+      <main className="flex-1 flex flex-col h-full overflow-hidden px-8 py-6 transition-all duration-300">
 
         {/* TOP BAR */}
         <header className="py-6 flex items-center justify-between shrink-0">
@@ -203,8 +224,9 @@ export default function HRRecruiterDashboard() {
         ) : activeView === 'settings' ? (
           <SettingsPage />
         ) : null}
-      </main >
-    </div >
+      </main>
+      </div>
+    </div>
   );
 }
 
