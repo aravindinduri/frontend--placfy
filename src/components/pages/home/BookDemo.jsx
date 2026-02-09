@@ -83,16 +83,13 @@ function BookDemo({ open, onClose }) {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.4 }}
-                      className="my-8 rounded-2xl bg-white p-6 shadow-lg"
+                      className="my-8  shadow-lg overflow-hidden"
                     >
-                      <div className="aspect-video w-full rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="mx-auto mb-4 h-32 w-32 rounded-full bg-indigo-600 flex items-center justify-center">
-                            <FaUser className="text-5xl text-white" />
-                          </div>
-                          <div className="text-2xl font-bold text-indigo-600">Book a Demo</div>
-                        </div>
-                      </div>
+                      <img 
+                        src="/HRManagement.jpg" 
+                        alt="HR Management Team" 
+                        className="aspect-video w-full rounded-lg object-cover"
+                      />
                     </motion.div>
                   </div>
 

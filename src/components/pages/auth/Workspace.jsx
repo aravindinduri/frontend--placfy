@@ -212,7 +212,7 @@ export default function Workspace() {
         initial={{ x: -60, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="lg:w-[420px] bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 lg:min-h-screen p-8 lg:p-12 text-white flex flex-col justify-between relative overflow-hidden"
+        className="lg:w-[420px] bg-gradient-to-br from-[#5a4fff] via-[#5146f2] to-[#4338e0] lg:min-h-screen p-8 lg:p-12 text-white flex flex-col justify-between relative overflow-hidden"
       >
         {/* Animated Background Elements */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-10">
@@ -249,9 +249,9 @@ export default function Workspace() {
             <motion.div 
               whileHover={{ scale: 1.05, rotate: -3 }}
               whileTap={{ scale: 0.95 }}
-              className="w-14 h-14 bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-2xl flex items-center justify-center shadow-2xl font-black text-2xl text-white"
+              className="w-14 h-14 bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden"
             >
-              P
+              <img src="/Logo3.png" alt="Placfy" className="w-full h-full object-cover rounded-xl" />
             </motion.div>
             <div>
               <h1 className="text-3xl font-black tracking-tight">
